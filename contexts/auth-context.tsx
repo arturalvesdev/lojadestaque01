@@ -49,50 +49,61 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const loadSupabaseProfile = useCallback(
     async (userId: string, email: string) => {
-      if (!supabase) {
-        setUser({ id: userId, email, displayName: null })
-        return
-      }
+      let displayName: string | null = null
 
-      try {
-        const { data, error } = await supabase
-          .from("profiles")
-          .select("display_name")
-          .eq("id", userId)
-          .single()
+      if (supabase) {
+        try {
+          const { data, error } = await supabase
+            .from("profiles")
+            .select("display_name")
+            .eq("id", userId)
+            .single()
 
-        if (error) {
-          setUser({ id: userId, email, displayName: null })
-        } else {
-          setUser({
-            id: userId,
-            email,
-            displayName: data?.display_name ?? null,
-          })
-        }
-
-        // Merge guest cart if this is a new login
-        const guestId = getGuestIdSync()
-        if (guestId) {
-          try {
-            await mergeGuestCartToUser(guestId, userId)
-            await linkGuestToUser(userId)
-          } catch (error) {
-            console.error("Failed to merge guest cart:", error)
+          if (!error) {
+            displayName = data?.display_name ?? null
           }
+        } catch (error) {
+          console.error("Failed to load user profile:", error)
         }
-      } catch {
-        setUser({ id: userId, email, displayName: null })
       }
+
+      const guestId = getGuestIdSync()
+      if (guestId) {
+        try {
+          const merged = await mergeGuestCartToUser(guestId, userId)
+          if (merged) {
+            await linkGuestToUser(userId)
+          }
+        } catch (error) {
+          console.error("Failed to merge guest cart:", error)
+        }
+      }
+
+      setUser({ id: userId, email, displayName })
     },
     [supabase]
   )
 
   const refreshProfile = useCallback(async () => {
     if (!supabaseEnabled) {
-      setUser(localGetSession())
+      const sessionUser = localGetSession()
+      if (sessionUser) {
+        const guestId = getGuestIdSync()
+        if (guestId) {
+          try {
+            const merged = await mergeGuestCartToUser(guestId, sessionUser.id)
+            if (merged) {
+              await linkGuestToUser(sessionUser.id)
+            }
+          } catch (error) {
+            console.error("Failed to merge guest cart in local mode:", error)
+          }
+        }
+      }
+      setUser(sessionUser)
       return
     }
+
     if (!supabase) return
     const {
       data: { user: authUser },
@@ -100,12 +111,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (authUser?.email) {
       await loadSupabaseProfile(authUser.id, authUser.email)
     }
-  }, [supabase, loadSupabaseProfile])
+  }, [supabase, loadSupabaseProfile, supabaseEnabled])
 
   useEffect(() => {
     if (!supabaseEnabled) {
-      setUser(localGetSession())
-      setIsLoading(false)
+      refreshProfile().finally(() => setIsLoading(false))
       return
     }
 
@@ -141,7 +151,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     })
 
     return () => subscription.unsubscribe()
-  }, [supabase, loadSupabaseProfile])
+  }, [supabase, loadSupabaseProfile, refreshProfile, supabaseEnabled])
 
   const signOut = async () => {
     if (supabaseEnabled && supabase) {

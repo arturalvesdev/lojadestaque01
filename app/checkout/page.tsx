@@ -7,8 +7,7 @@
 
 "use client"
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { useCart } from "@/contexts/cart-context"
 import { useAuth } from "@/contexts/auth-context"
 import { LoginForm } from "@/components/auth/login-form"
@@ -16,17 +15,9 @@ import { RegisterForm } from "@/components/auth/register-form"
 import Link from "next/link"
 
 export default function CheckoutPage() {
-  const router = useRouter()
   const { items, totalPrice, isLoading: isCartLoading } = useCart()
   const { isAuthenticated, isLoading: isAuthLoading, user } = useAuth()
   const [showRegister, setShowRegister] = useState(false)
-
-  // If authenticated, redirect to shipping page
-  useEffect(() => {
-    if (!isAuthLoading && isAuthenticated) {
-      router.push("/checkout/shipping")
-    }
-  }, [isAuthenticated, isAuthLoading, router])
 
   if (isCartLoading || isAuthLoading) {
     return (
@@ -34,6 +25,30 @@ export default function CheckoutPage() {
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
           <p className="mt-4 text-muted-foreground">Carregando...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // If the user is already authenticated, explain the current checkout flow.
+  if (isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="max-w-7xl mx-auto px-4 py-12">
+          <h1 className="text-4xl font-bold mb-8">Checkout</h1>
+          <div className="bg-secondary rounded-lg p-8">
+            <h2 className="text-2xl font-bold mb-4">Você já está logado</h2>
+            <p className="text-muted-foreground mb-6">
+              O fluxo de envio completo ainda não foi implementado neste momento.
+              Por enquanto, revise sua sacola e finalize o pedido pelo WhatsApp.
+            </p>
+            <Link
+              href="/"
+              className="inline-block px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition"
+            >
+              Voltar às Compras
+            </Link>
+          </div>
         </div>
       </div>
     )

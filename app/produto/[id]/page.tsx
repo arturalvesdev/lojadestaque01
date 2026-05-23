@@ -7,7 +7,7 @@
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { ArrowLeft, Heart, ShoppingBag, Minus, Plus } from "lucide-react"
-import { useState, use } from "react"
+import { useState } from "react"
 import { toast } from "sonner"
 import { useCart } from "@/contexts/cart-context"
 import { getProductById } from "@/lib/products"
@@ -23,15 +23,14 @@ import {
 export default function ProductPage({
   params,
 }: {
-  params: Promise<{ id: string }>
+  params: { id: string }
 }) {
-  const resolvedParams = use(params)
   const [quantity, setQuantity] = useState(1)
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
   const [selectedColor, setSelectedColor] = useState<string | null>(null)
   const { addItem } = useCart()
 
-  const product = getProductById(resolvedParams.id)
+  const product = getProductById(params.id)
 
   if (!product) {
     return (

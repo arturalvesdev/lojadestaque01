@@ -14,11 +14,7 @@ export function ThemeToggle() {
 
   const toggleTheme = () => {
     const current = resolvedTheme || theme
-    console.log("theme button clicked", { theme, resolvedTheme, htmlBefore: document.documentElement.className })
     setTheme(current === "dark" ? "light" : "dark")
-    setTimeout(() => {
-      console.log("theme toggled", { theme, resolvedTheme, htmlAfter: document.documentElement.className })
-    }, 50)
   }
 
   return (

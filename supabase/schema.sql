@@ -93,17 +93,20 @@ create trigger guest_sessions_updated_at
   for each row execute function public.handle_updated_at();
 
 alter table public.guest_sessions enable row level security;
+-- Restrict guest session modifications to server-side only (admin client).
+-- Disallow direct anonymous/browser inserts/updates to avoid GUC-based bypass.
+create policy "guest_sessions_select_user"
+  on public.guest_sessions for select
+  using (user_id = auth.uid());
 
--- Qualquer pessoa pode ler/inserir sua própria sessão (via guest_id)
-create policy "guest_sessions_insert"
+create policy "guest_sessions_insert_restricted"
   on public.guest_sessions for insert
-  with check (true);
+  with check (false);
 
--- Qualquer pessoa pode atualizar sua própria sessão
-create policy "guest_sessions_update"
+create policy "guest_sessions_update_restricted"
   on public.guest_sessions for update
-  using (true)
-  with check (true);
+  using (user_id = auth.uid())
+  with check (user_id = auth.uid());
 
 -- ============================================================
 -- CARTS — Carrinhos de compra (guest ou autenticado)
@@ -119,6 +122,7 @@ create table if not exists public.carts (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   expires_at timestamptz not null default (now() + interval '30 days'),
+  merged_at timestamptz,
   constraint cart_has_owner check (
     (guest_session_id is not null and user_id is null) or
     (guest_session_id is null and user_id is not null)
@@ -137,36 +141,16 @@ create trigger carts_updated_at
   for each row execute function public.handle_updated_at();
 
 alter table public.carts enable row level security;
-
--- Guests podem ler/atualizar seus carrinhos
-create policy "carts_guest_access"
-  on public.carts for select
-  using (
-    guest_session_id in (
-      select id from public.guest_sessions where guest_id = current_setting('app.guest_id', true)::text
-    ) or user_id = auth.uid()
-  );
-
-create policy "carts_guest_insert"
-  on public.carts for insert
-  with check (
-    (guest_session_id is not null) or
-    (user_id = auth.uid())
-  );
-
-create policy "carts_guest_update"
-  on public.carts for update
-  using (
-    (guest_session_id is not null) or
-    (user_id = auth.uid())
-  );
-
--- Users podem ler/atualizar seus carrinhos
-create policy "carts_user_access"
+-- Only authenticated users may read/insert/update carts for their own account.
+create policy "carts_select_authenticated"
   on public.carts for select
   using (user_id = auth.uid());
 
-create policy "carts_user_update"
+create policy "carts_insert_authenticated"
+  on public.carts for insert
+  with check (user_id = auth.uid());
+
+create policy "carts_update_authenticated"
   on public.carts for update
   using (user_id = auth.uid());
 
@@ -190,6 +174,8 @@ create table if not exists public.cart_items (
 create index if not exists cart_items_cart_id_idx on public.cart_items(cart_id);
 create index if not exists cart_items_product_id_idx on public.cart_items(product_id);
 create index if not exists cart_items_created_at_idx on public.cart_items(created_at);
+-- Ensure a unique object per cart/product/size/color to allow safe upserts during merge
+create unique index if not exists cart_items_unique_idx on public.cart_items(cart_id, product_id, size, color);
 
 drop trigger if exists cart_items_updated_at on public.cart_items;
 create trigger cart_items_updated_at
@@ -197,39 +183,38 @@ create trigger cart_items_updated_at
   for each row execute function public.handle_updated_at();
 
 alter table public.cart_items enable row level security;
-
--- Users e guests podem ler seus próprios itens (via carteira)
-create policy "cart_items_select"
+-- Only allow authenticated users to access cart items for carts they own.
+create policy "cart_items_select_authenticated"
   on public.cart_items for select
   using (
     cart_id in (
-      select id from public.carts where user_id = auth.uid() or guest_session_id in (
-        select id from public.guest_sessions where guest_id = current_setting('app.guest_id', true)::text
-      )
+      select id from public.carts where user_id = auth.uid()
     )
   );
 
-create policy "cart_items_insert"
+create policy "cart_items_insert_authenticated"
   on public.cart_items for insert
   with check (
     cart_id in (
-      select id from public.carts where user_id = auth.uid() or guest_session_id is not null
+      select id from public.carts where user_id = auth.uid()
     )
   );
 
-create policy "cart_items_update"
+-- Transactional merge function: merge_guest_cart(guest_id_text text, target_user_id uuid)
+
+create policy "cart_items_update_authenticated"
   on public.cart_items for update
   using (
     cart_id in (
-      select id from public.carts where user_id = auth.uid() or guest_session_id is not null
+      select id from public.carts where user_id = auth.uid()
     )
   );
 
-create policy "cart_items_delete"
+create policy "cart_items_delete_authenticated"
   on public.cart_items for delete
   using (
     cart_id in (
-      select id from public.carts where user_id = auth.uid() or guest_session_id is not null
+      select id from public.carts where user_id = auth.uid()
     )
   );
 

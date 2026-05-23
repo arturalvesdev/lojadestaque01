@@ -3,7 +3,7 @@
  * Handles anonymous user identification and tracking without authentication.
  */
 
-import { createClient } from "@/lib/supabase/client"
+// Guest session persistence is handled by the server-side cart API.
 
 const GUEST_ID_KEY = "destaquepremium_guest_id"
 const GUEST_SESSION_TTL = 30 * 24 * 60 * 60 * 1000 // 30 days in ms
@@ -33,23 +33,7 @@ export async function getOrCreateGuestId(): Promise<string> {
   let guestId = localStorage.getItem(GUEST_ID_KEY)
 
   if (guestId) {
-    // Validate it exists in Supabase (might be expired)
-    try {
-      const supabase = createClient()
-      const { data } = await supabase
-        .from("guest_sessions")
-        .select("id")
-        .eq("guest_id", guestId)
-        .single()
-
-      if (data) {
-        // Session exists and is valid
-        return guestId
-      }
-    } catch {
-      // Session doesn't exist or expired, create new
-      guestId = null
-    }
+    return guestId
   }
 
   // Create new guest session
@@ -58,21 +42,32 @@ export async function getOrCreateGuestId(): Promise<string> {
     localStorage.setItem(GUEST_ID_KEY, guestId)
   }
 
-  // Register in Supabase
-  try {
-    const supabase = createClient()
-    const expiresAt = new Date(Date.now() + GUEST_SESSION_TTL)
-
-    await supabase.from("guest_sessions").insert({
-      guest_id: guestId,
-      expires_at: expiresAt.toISOString(),
-    })
-  } catch (error) {
-    // If insert fails (duplicate), that's fine - guest_id already exists
-    console.debug("Guest session already exists:", error)
-  }
+  // The cart API will establish a secure guest session on the first request.
 
   return guestId
+}
+
+/**
+ * Update guest session with user ID when they authenticate
+ */
+export async function linkGuestToUser(userId: string): Promise<void> {
+  const guestId = getGuestIdSync()
+
+  if (!guestId) {
+    // No guest session to link
+    return
+  }
+
+  if (typeof window === "undefined") {
+    return
+  }
+
+  try {
+    // The server-side cart API will merge or link guest sessions on auth.
+    clearGuestId()
+  } catch (error) {
+    console.error("Failed to link guest to user:", error)
+  }
 }
 
 /**
@@ -101,31 +96,4 @@ export function clearGuestId(): void {
     return
   }
   localStorage.removeItem(GUEST_ID_KEY)
-}
-
-/**
- * Update guest session with user ID when they authenticate
- */
-export async function linkGuestToUser(userId: string): Promise<void> {
-  const guestId = getGuestIdSync()
-
-  if (!guestId) {
-    // No guest session to link
-    return
-  }
-
-  try {
-    const supabase = createClient()
-
-    // Update guest_session to link with user_id
-    await supabase
-      .from("guest_sessions")
-      .update({ user_id: userId })
-      .eq("guest_id", guestId)
-
-    // Clear localStorage (no longer need guest_id now that we have user_id)
-    clearGuestId()
-  } catch (error) {
-    console.error("Failed to link guest to user:", error)
-  }
 }

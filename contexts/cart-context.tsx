@@ -22,6 +22,9 @@ import {
   getOrCreateGuestCart,
   getUserCart,
   addCartItem as persistAddCartItem,
+  updateCartItemQuantity as persistUpdateCartItemQuantity,
+  removeCartItem as persistRemoveCartItem,
+  clearCart as persistClearCart,
 } from "@/lib/cart/persistence"
 import type { CartItem, AddToCartPayload } from "@/lib/types/cart"
 
@@ -145,22 +148,56 @@ export function CartProvider({ children }: { children: ReactNode }) {
   )
 
   const removeItem = (cartLineId: string) => {
+    const item = items.find((i) => i.cartLineId === cartLineId)
+    if (!item) {
+      return
+    }
+
     setItems((prev) => prev.filter((i) => i.cartLineId !== cartLineId))
+
+    if (cartId) {
+      persistRemoveCartItem(cartId, item).catch((error) => {
+        console.error("Failed to remove cart item:", error)
+        toast.error("Não foi possível remover o item. Tente novamente.")
+      })
+    }
   }
 
   const updateQuantity = (cartLineId: string, quantity: number) => {
+    const item = items.find((i) => i.cartLineId === cartLineId)
+    if (!item) {
+      return
+    }
+
     if (quantity <= 0) {
       removeItem(cartLineId)
       return
     }
+
     setItems((prev) =>
       prev.map((i) =>
         i.cartLineId === cartLineId ? { ...i, quantity } : i
       )
     )
+
+    if (cartId) {
+      persistUpdateCartItemQuantity(cartId, item, quantity).catch((error) => {
+        console.error("Failed to update cart quantity:", error)
+        toast.error("Não foi possível atualizar a quantidade. Tente novamente.")
+      })
+    }
   }
 
-  const clearCart = () => setItems([])
+  const clearCart = () => {
+    setItems([])
+
+    if (cartId) {
+      persistClearCart(cartId).catch((error) => {
+        console.error("Failed to clear cart:", error)
+        toast.error("Não foi possível limpar o carrinho.")
+      })
+    }
+  }
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0)
   const totalPrice = items.reduce(

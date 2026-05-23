@@ -1,10 +1,9 @@
 /**
  * Cart persistence layer
- * Handles saving/loading carts from Supabase and localStorage.
+ * Handles saving/loading carts through a secure server API and localStorage fallback.
  */
 
-import { createClient } from "@/lib/supabase/client"
-import { getGuestIdSync } from "@/lib/auth/guest-session"
+import { getProductById } from "@/lib/products"
 import type { CartItem } from "@/lib/types/cart"
 
 export interface StoredCart {
@@ -14,401 +13,325 @@ export interface StoredCart {
   itemCount: number
 }
 
-/**
- * Get or create a guest cart in Supabase
- */
+type CartOwner =
+  | { type: "guest"; id: string }
+  | { type: "user"; id: string }
+
+const LOCAL_CART_PREFIX = "destaquepremium_local_cart"
+const API_CART_ROUTE = "/api/cart"
+
+function getLocalStorageKey(owner: CartOwner) {
+  return `${LOCAL_CART_PREFIX}:${owner.type}:${owner.id}`
+}
+
+function parseLocalCartId(cartId: string): CartOwner | null {
+  if (cartId.startsWith("guest:")) {
+    return { type: "guest", id: cartId.replace("guest:", "") }
+  }
+  if (cartId.startsWith("user:")) {
+    return { type: "user", id: cartId.replace("user:", "") }
+  }
+  return null
+}
+
+function readLocalCart(owner: CartOwner): StoredCart | null {
+  if (typeof window === "undefined") return null
+  try {
+    const value = localStorage.getItem(getLocalStorageKey(owner))
+    return value ? (JSON.parse(value) as StoredCart) : null
+  } catch {
+    return null
+  }
+}
+
+function writeLocalCart(owner: CartOwner, cart: StoredCart) {
+  if (typeof window === "undefined") return
+  localStorage.setItem(getLocalStorageKey(owner), JSON.stringify(cart))
+}
+
+function buildLocalCart(owner: CartOwner): StoredCart {
+  const cart: StoredCart = {
+    id: `${owner.type}:${owner.id}`,
+    items: [],
+    subtotalCents: 0,
+    itemCount: 0,
+  }
+  writeLocalCart(owner, cart)
+  return cart
+}
+
+function updateLocalCartTotals(cart: StoredCart): StoredCart {
+  const subtotalCents = cart.items.reduce(
+    (sum, item) => sum + Math.round(item.price * 100) * item.quantity,
+    0
+  )
+  const itemCount = cart.items.reduce((sum, item) => sum + item.quantity, 0)
+  return { ...cart, subtotalCents, itemCount }
+}
+
+function enrichCategory(item: CartItem): CartItem {
+  if (item.category) return item
+  const product = getProductById(item.productId)
+  return {
+    ...item,
+    category: product?.category ?? "",
+  }
+}
+
+function normalizeLocalCartItems(items: CartItem[]): CartItem[] {
+  return items.map(enrichCategory)
+}
+
+async function requestCartApi<T>(path: string, init: RequestInit): Promise<T | null> {
+  try {
+    const response = await fetch(path, {
+      ...init,
+      headers: {
+        "Content-Type": "application/json",
+        ...(init.headers ?? {}),
+      },
+      credentials: "include",
+      cache: "no-store",
+    })
+
+    if (!response.ok) {
+      return null
+    }
+
+    return (await response.json()) as T
+  } catch {
+    return null
+  }
+}
+
+async function fetchCartFromApi(): Promise<StoredCart | null> {
+  return requestCartApi<StoredCart>(API_CART_ROUTE, {
+    method: "GET",
+  })
+}
+
+async function postCartAction<T>(body: unknown): Promise<T | null> {
+  return requestCartApi<T>(API_CART_ROUTE, {
+    method: "POST",
+    body: JSON.stringify(body),
+  })
+}
+
+async function patchCartAction<T>(body: unknown): Promise<T | null> {
+  return requestCartApi<T>(API_CART_ROUTE, {
+    method: "PATCH",
+    body: JSON.stringify(body),
+  })
+}
+
+async function deleteCartAction<T>(body: unknown): Promise<T | null> {
+  return requestCartApi<T>(API_CART_ROUTE, {
+    method: "DELETE",
+    body: JSON.stringify(body),
+  })
+}
+
+function getOrCreateLocalCart(owner: CartOwner): StoredCart {
+  const existing = readLocalCart(owner)
+  return existing ?? buildLocalCart(owner)
+}
+
 export async function getOrCreateGuestCart(
   guestSessionId: string
 ): Promise<StoredCart | null> {
-  try {
-    const supabase = createClient()
-
-    // Find guest_sessions.id by guest_id
-    const { data: sessionData } = await supabase
-      .from("guest_sessions")
-      .select("id")
-      .eq("guest_id", guestSessionId)
-      .single()
-
-    if (!sessionData) {
-      return null
-    }
-
-    // Find or create cart for this guest session
-    let { data: cartData } = await supabase
-      .from("carts")
-      .select("id, subtotal_cents, item_count")
-      .eq("guest_session_id", sessionData.id)
-      .eq("status", "active")
-      .single()
-
-    if (!cartData) {
-      // Create new cart
-      const { data: newCart } = await supabase
-        .from("carts")
-        .insert({
-          guest_session_id: sessionData.id,
-          status: "active",
-          subtotal_cents: 0,
-          item_count: 0,
-        })
-        .select("id, subtotal_cents, item_count")
-        .single()
-
-      cartData = newCart
-    }
-
-    if (!cartData) {
-      return null
-    }
-
-    // Load cart items
-    const { data: items } = await supabase
-      .from("cart_items")
-      .select("*")
-      .eq("cart_id", cartData.id)
-
-    return {
-      id: cartData.id,
-      items: (items || []).map((item) => ({
-        cartLineId: `${item.product_id}_${item.size}_${item.color}`,
-        productId: item.product_id,
-        name: item.name,
-        price: item.price_cents / 100,
-        quantity: item.quantity,
-        size: item.size,
-        color: item.color,
-        category: "", // Will be filled by cart context
-      })),
-      subtotalCents: cartData.subtotal_cents,
-      itemCount: cartData.item_count,
-    }
-  } catch (error) {
-    console.error("Failed to get/create guest cart:", error)
-    return null
+  const owner: CartOwner = {
+    type: "guest",
+    id: guestSessionId || "fallback",
   }
+
+  const cart = await fetchCartFromApi()
+  if (cart) {
+    return cart
+  }
+
+  return getOrCreateLocalCart(owner)
 }
 
-/**
- * Get authenticated user's active cart
- */
 export async function getUserCart(userId: string): Promise<StoredCart | null> {
-  try {
-    const supabase = createClient()
-
-    // Find or create cart for this user
-    let { data: cartData } = await supabase
-      .from("carts")
-      .select("id, subtotal_cents, item_count")
-      .eq("user_id", userId)
-      .eq("status", "active")
-      .single()
-
-    if (!cartData) {
-      // Create new cart
-      const { data: newCart } = await supabase
-        .from("carts")
-        .insert({
-          user_id: userId,
-          status: "active",
-          subtotal_cents: 0,
-          item_count: 0,
-        })
-        .select("id, subtotal_cents, item_count")
-        .single()
-
-      cartData = newCart
-    }
-
-    if (!cartData) {
-      return null
-    }
-
-    // Load cart items
-    const { data: items } = await supabase
-      .from("cart_items")
-      .select("*")
-      .eq("cart_id", cartData.id)
-
-    return {
-      id: cartData.id,
-      items: (items || []).map((item) => ({
-        cartLineId: `${item.product_id}_${item.size}_${item.color}`,
-        productId: item.product_id,
-        name: item.name,
-        price: item.price_cents / 100,
-        quantity: item.quantity,
-        size: item.size,
-        color: item.color,
-        category: "", // Will be filled by cart context
-      })),
-      subtotalCents: cartData.subtotal_cents,
-      itemCount: cartData.item_count,
-    }
-  } catch (error) {
-    console.error("Failed to get/create user cart:", error)
-    return null
+  const owner: CartOwner = { type: "user", id: userId }
+  const cart = await fetchCartFromApi()
+  if (cart) {
+    return cart
   }
+  return getOrCreateLocalCart(owner)
 }
 
-/**
- * Add item to cart
- */
+function getLocalCartOwner(cartId: string): CartOwner | null {
+  return parseLocalCartId(cartId)
+}
+
 export async function addCartItem(
   cartId: string,
   item: CartItem
 ): Promise<boolean> {
-  try {
-    const supabase = createClient()
-
-    // Check if item already exists (same product, size, color)
-    const { data: existing } = await supabase
-      .from("cart_items")
-      .select("id, quantity")
-      .eq("cart_id", cartId)
-      .eq("product_id", item.productId)
-      .eq("size", item.size)
-      .eq("color", item.color)
-      .single()
+  const localOwner = getLocalCartOwner(cartId)
+  if (localOwner) {
+    const cart = readLocalCart(localOwner) ?? buildLocalCart(localOwner)
+    const existing = cart.items.find(
+      (stored) =>
+        stored.productId === item.productId &&
+        stored.size === item.size &&
+        stored.color === item.color
+    )
 
     if (existing) {
-      // Update quantity
-      await supabase
-        .from("cart_items")
-        .update({ quantity: existing.quantity + item.quantity })
-        .eq("id", existing.id)
+      existing.quantity += item.quantity
     } else {
-      // Insert new item
-      await supabase.from("cart_items").insert({
-        cart_id: cartId,
-        product_id: item.productId,
-        name: item.name,
-        price_cents: Math.round(item.price * 100),
-        quantity: item.quantity,
-        size: item.size,
-        color: item.color,
-      })
+      cart.items.push({ ...item })
     }
 
-    // Update cart totals
-    await updateCartTotals(cartId)
-
+    writeLocalCart(localOwner, updateLocalCartTotals(cart))
     return true
-  } catch (error) {
-    console.error("Failed to add cart item:", error)
-    return false
   }
+
+  const response = await postCartAction<StoredCart>({
+    productId: item.productId,
+    name: item.name,
+    price: item.price,
+    quantity: item.quantity,
+    size: item.size,
+    color: item.color,
+  })
+
+  return response !== null
 }
 
-/**
- * Update item quantity
- */
 export async function updateCartItemQuantity(
-  itemId: string,
+  cartId: string,
+  item: CartItem,
   quantity: number
 ): Promise<boolean> {
-  try {
-    const supabase = createClient()
+  const localOwner = getLocalCartOwner(cartId)
+  if (localOwner) {
+    const cart = readLocalCart(localOwner)
+    if (!cart) return false
+
+    const found = cart.items.find(
+      (stored) =>
+        stored.productId === item.productId &&
+        stored.size === item.size &&
+        stored.color === item.color
+    )
+
+    if (!found) return false
 
     if (quantity <= 0) {
-      // Delete item if quantity is 0 or negative
-      await supabase.from("cart_items").delete().eq("id", itemId)
+      cart.items = cart.items.filter((stored) => stored !== found)
     } else {
-      // Update quantity
-      await supabase
-        .from("cart_items")
-        .update({ quantity })
-        .eq("id", itemId)
+      found.quantity = quantity
     }
 
+    writeLocalCart(localOwner, updateLocalCartTotals(cart))
     return true
-  } catch (error) {
-    console.error("Failed to update cart item quantity:", error)
-    return false
   }
+
+  const response = await patchCartAction<StoredCart>({
+    productId: item.productId,
+    size: item.size,
+    color: item.color,
+    quantity,
+  })
+
+  return response !== null
 }
 
-/**
- * Remove item from cart
- */
-export async function removeCartItem(itemId: string): Promise<boolean> {
-  try {
-    const supabase = createClient()
-    await supabase.from("cart_items").delete().eq("id", itemId)
-    return true
-  } catch (error) {
-    console.error("Failed to remove cart item:", error)
-    return false
-  }
-}
+export async function removeCartItem(
+  cartId: string,
+  item: CartItem
+): Promise<boolean> {
+  const localOwner = getLocalCartOwner(cartId)
+  if (localOwner) {
+    const cart = readLocalCart(localOwner)
+    if (!cart) return false
 
-/**
- * Clear all items from cart
- */
-export async function clearCart(cartId: string): Promise<boolean> {
-  try {
-    const supabase = createClient()
-    await supabase.from("cart_items").delete().eq("cart_id", cartId)
-    await updateCartTotals(cartId)
-    return true
-  } catch (error) {
-    console.error("Failed to clear cart:", error)
-    return false
-  }
-}
-
-/**
- * Update cart totals (subtotal, item_count)
- */
-export async function updateCartTotals(cartId: string): Promise<void> {
-  try {
-    const supabase = createClient()
-
-    // Get all items in cart
-    const { data: items } = await supabase
-      .from("cart_items")
-      .select("price_cents, quantity")
-      .eq("cart_id", cartId)
-
-    if (!items) {
-      return
-    }
-
-    // Calculate totals
-    const subtotalCents = items.reduce(
-      (sum, item) => sum + item.price_cents * item.quantity,
-      0
+    cart.items = cart.items.filter(
+      (stored) =>
+        !(
+          stored.productId === item.productId &&
+          stored.size === item.size &&
+          stored.color === item.color
+        )
     )
-    const itemCount = items.reduce((sum, item) => sum + item.quantity, 0)
 
-    // Update cart
-    await supabase
-      .from("carts")
-      .update({ subtotal_cents: subtotalCents, item_count: itemCount })
-      .eq("id", cartId)
-  } catch (error) {
-    console.error("Failed to update cart totals:", error)
+    writeLocalCart(localOwner, updateLocalCartTotals(cart))
+    return true
+  }
+
+  const response = await deleteCartAction<StoredCart>({
+    productId: item.productId,
+    size: item.size,
+    color: item.color,
+  })
+
+  return response !== null
+}
+
+export async function clearCart(cartId: string): Promise<boolean> {
+  const localOwner = getLocalCartOwner(cartId)
+  if (localOwner) {
+    const cart = readLocalCart(localOwner)
+    if (!cart) return false
+    writeLocalCart(localOwner, buildLocalCart(localOwner))
+    return true
+  }
+
+  const response = await deleteCartAction<StoredCart>({ action: "clear" })
+  return response !== null
+}
+
+export async function updateCartTotals(cartId: string): Promise<void> {
+  const localOwner = getLocalCartOwner(cartId)
+  if (localOwner) {
+    const cart = readLocalCart(localOwner)
+    if (!cart) return
+    writeLocalCart(localOwner, updateLocalCartTotals(cart))
   }
 }
 
-/**
- * Merge guest cart into user cart
- * Called when a guest logs in/registers
- */
 export async function mergeGuestCartToUser(
   guestSessionId: string,
   userId: string
 ): Promise<boolean> {
-  try {
-    const supabase = createClient()
-
-    // Find guest_sessions.id by guest_id
-    const { data: sessionData } = await supabase
-      .from("guest_sessions")
-      .select("id")
-      .eq("guest_id", guestSessionId)
-      .single()
-
-    if (!sessionData) {
-      return false
-    }
-
-    // Find guest's cart
-    const { data: guestCart } = await supabase
-      .from("carts")
-      .select("id")
-      .eq("guest_session_id", sessionData.id)
-      .eq("status", "active")
-      .single()
-
-    if (!guestCart) {
-      // No guest cart to merge
-      return true
-    }
-
-    // Get guest's items
-    const { data: guestItems } = await supabase
-      .from("cart_items")
-      .select("*")
-      .eq("cart_id", guestCart.id)
-
-    if (!guestItems || guestItems.length === 0) {
-      // No items to merge
-      return true
-    }
-
-    // Find or create user's cart
-    let { data: userCart } = await supabase
-      .from("carts")
-      .select("id")
-      .eq("user_id", userId)
-      .eq("status", "active")
-      .single()
-
-    if (!userCart) {
-      // Create user's cart
-      const { data: newUserCart } = await supabase
-        .from("carts")
-        .insert({
-          user_id: userId,
-          status: "active",
-          subtotal_cents: 0,
-          item_count: 0,
-        })
-        .select("id")
-        .single()
-
-      userCart = newUserCart
-    }
-
-    if (!userCart) {
-      return false
-    }
-
-    // Merge items: copy guest items to user cart
-    for (const guestItem of guestItems) {
-      // Check if user already has this item
-      const { data: existingItem } = await supabase
-        .from("cart_items")
-        .select("id, quantity")
-        .eq("cart_id", userCart.id)
-        .eq("product_id", guestItem.product_id)
-        .eq("size", guestItem.size)
-        .eq("color", guestItem.color)
-        .single()
-
-      if (existingItem) {
-        // Update quantity (add guest quantity to user quantity)
-        await supabase
-          .from("cart_items")
-          .update({ quantity: existingItem.quantity + guestItem.quantity })
-          .eq("id", existingItem.id)
-      } else {
-        // Insert guest item into user cart
-        await supabase.from("cart_items").insert({
-          cart_id: userCart.id,
-          product_id: guestItem.product_id,
-          name: guestItem.name,
-          price_cents: guestItem.price_cents,
-          quantity: guestItem.quantity,
-          size: guestItem.size,
-          color: guestItem.color,
-        })
-      }
-    }
-
-    // Update user's cart totals
-    await updateCartTotals(userCart.id)
-
-    // Mark guest cart as merged
-    await supabase
-      .from("carts")
-      .update({ status: "merged" })
-      .eq("id", guestCart.id)
-
+  if (!guestSessionId) {
     return true
-  } catch (error) {
-    console.error("Failed to merge guest cart:", error)
-    return false
   }
+
+  const cart = await fetchCartFromApi()
+  if (cart) {
+    return true
+  }
+
+  const guestOwner: CartOwner = { type: "guest", id: guestSessionId }
+  const userOwner: CartOwner = { type: "user", id: userId }
+
+  const guestCart = readLocalCart(guestOwner)
+  if (!guestCart || guestCart.items.length === 0) {
+    return true
+  }
+
+  const userCart = readLocalCart(userOwner) ?? buildLocalCart(userOwner)
+
+  for (const guestItem of guestCart.items) {
+    const existingItem = userCart.items.find(
+      (stored) =>
+        stored.productId === guestItem.productId &&
+        stored.size === guestItem.size &&
+        stored.color === guestItem.color
+    )
+
+    if (existingItem) {
+      existingItem.quantity += guestItem.quantity
+    } else {
+      userCart.items.push({ ...guestItem })
+    }
+  }
+
+  writeLocalCart(userOwner, updateLocalCartTotals(userCart))
+  writeLocalCart(guestOwner, buildLocalCart(guestOwner))
+  return true
 }
