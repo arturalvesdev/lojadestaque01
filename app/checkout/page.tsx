@@ -16,7 +16,7 @@ import Link from "next/link"
 
 export default function CheckoutPage() {
   const { items, totalPrice, isLoading: isCartLoading } = useCart()
-  const { isAuthenticated, isLoading: isAuthLoading, user } = useAuth()
+  const { isAuthenticated, isLoading: isAuthLoading } = useAuth()
   const [showRegister, setShowRegister] = useState(false)
 
   if (isCartLoading || isAuthLoading) {
@@ -120,7 +120,7 @@ export default function CheckoutPage() {
               {showRegister ? (
                 <>
                   <h2 className="text-2xl font-bold mb-6">Criar Conta</h2>
-                  <RegisterForm onSwitchToLogin={() => setShowRegister(false)} />
+                  <RegisterForm onBack={() => setShowRegister(false)} />
                 </>
               ) : (
                 <>

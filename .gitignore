@@ -5,3 +5,10 @@
 node_modules
 .next/
 .DS_Store
+
+# TypeScript build cache
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# Temporary / research files
+next_themes_search.txt

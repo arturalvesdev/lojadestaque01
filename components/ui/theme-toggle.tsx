@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Moon, Sun } from "lucide-react"
-import { useTheme } from "next-themes"
+import { useTheme } from "@/components/ui/theme-provider"
 
 export function ThemeToggle() {
   const { theme, setTheme, resolvedTheme } = useTheme()
@@ -22,7 +22,7 @@ export function ThemeToggle() {
       type="button"
       onClick={toggleTheme}
       aria-label="Alternar tema claro/escuro"
-      aria-pressed={resolvedTheme === "dark"}
+      aria-pressed={mounted && resolvedTheme === "dark"}
       className="grid place-items-center w-10 h-10 rounded-full border border-border bg-background/80 text-foreground hover:bg-primary/15 transition-colors"
     >
       {!mounted ? (

@@ -6,6 +6,9 @@ import { getProductById } from "@/lib/products"
 const GUEST_COOKIE = "destaque_guest_session_id"
 const GUEST_SESSION_TTL_SECONDS = 30 * 24 * 60 * 60
 
+// Convenience alias: non-null admin client (callers must guard before passing)
+type AdminClient = NonNullable<ReturnType<typeof createAdminClient>>
+
 function buildCartLineId(productId: string, size: string, color: string) {
   return `${productId}_${size}_${color}`
 }
@@ -46,19 +49,16 @@ function buildResponse(data: any, guestId?: string) {
   return response
 }
 
-function clearGuestCookie() {
-  const response = NextResponse.json({})
-  response.cookies.delete(GUEST_COOKIE, { path: "/" })
-  return response
-}
 
 async function getCurrentUser() {
   const supabase = await createClient()
+  // FIX: createClient() returns null when Supabase env vars are not configured
+  if (!supabase) return null
   const { data } = await supabase.auth.getUser()
   return data.user ?? null
 }
 
-async function getOrCreateGuestSession(admin: ReturnType<typeof createAdminClient>, guestId?: string) {
+async function getOrCreateGuestSession(admin: AdminClient, guestId?: string) {
   const expiresAt = new Date(Date.now() + GUEST_SESSION_TTL_SECONDS * 1000).toISOString()
 
   if (guestId) {
@@ -86,7 +86,7 @@ async function getOrCreateGuestSession(admin: ReturnType<typeof createAdminClien
   return newGuestId
 }
 
-async function getOrCreateGuestCart(admin: ReturnType<typeof createAdminClient>, guestId: string) {
+async function getOrCreateGuestCart(admin: AdminClient, guestId: string) {
   const { data: sessionData } = await admin
     .from("guest_sessions")
     .select("id")
@@ -119,10 +119,15 @@ async function getOrCreateGuestCart(admin: ReturnType<typeof createAdminClient>,
     .select("id")
     .single()
 
+  // FIX: insert().single() can return null if the DB insert fails
+  if (!newCart) {
+    throw new Error("Failed to create guest cart")
+  }
+
   return { cartId: newCart.id, guestSessionId: sessionData.id }
 }
 
-async function getOrCreateUserCart(admin: ReturnType<typeof createAdminClient>, userId: string) {
+async function getOrCreateUserCart(admin: AdminClient, userId: string) {
   const { data: cartData } = await admin
     .from("carts")
     .select("id, subtotal_cents, item_count")
@@ -145,10 +150,15 @@ async function getOrCreateUserCart(admin: ReturnType<typeof createAdminClient>, 
     .select("id")
     .single()
 
+  // FIX: insert().single() can return null if the DB insert fails
+  if (!newCart) {
+    throw new Error("Failed to create user cart")
+  }
+
   return { cartId: newCart.id }
 }
 
-async function getCartPayload(admin: ReturnType<typeof createAdminClient>, cartId: string) {
+async function getCartPayload(admin: AdminClient, cartId: string) {
   const { data: cartData } = await admin
     .from("carts")
     .select("id, subtotal_cents, item_count")
@@ -172,7 +182,7 @@ async function getCartPayload(admin: ReturnType<typeof createAdminClient>, cartI
   }
 }
 
-async function updateCartTotals(admin: ReturnType<typeof createAdminClient>, cartId: string) {
+async function updateCartTotals(admin: AdminClient, cartId: string) {
   const { data: items } = await admin
     .from("cart_items")
     .select("price_cents, quantity")
@@ -190,7 +200,7 @@ async function updateCartTotals(admin: ReturnType<typeof createAdminClient>, car
     .eq("id", cartId)
 }
 
-async function addItemToCart(admin: ReturnType<typeof createAdminClient>, cartId: string, item: any) {
+async function addItemToCart(admin: AdminClient, cartId: string, item: any) {
   const { data: existing } = await admin
     .from("cart_items")
     .select("id, quantity")
@@ -220,7 +230,7 @@ async function addItemToCart(admin: ReturnType<typeof createAdminClient>, cartId
   await updateCartTotals(admin, cartId)
 }
 
-async function patchItemQuantity(admin: ReturnType<typeof createAdminClient>, cartId: string, productId: string, size: string, color: string, quantity: number) {
+async function patchItemQuantity(admin: AdminClient, cartId: string, productId: string, size: string, color: string, quantity: number) {
   if (quantity <= 0) {
     await admin
       .from("cart_items")
@@ -236,7 +246,7 @@ async function patchItemQuantity(admin: ReturnType<typeof createAdminClient>, ca
   await updateCartTotals(admin, cartId)
 }
 
-async function removeItemFromCart(admin: ReturnType<typeof createAdminClient>, cartId: string, productId: string, size: string, color: string) {
+async function removeItemFromCart(admin: AdminClient, cartId: string, productId: string, size: string, color: string) {
   await admin
     .from("cart_items")
     .delete()
@@ -245,14 +255,14 @@ async function removeItemFromCart(admin: ReturnType<typeof createAdminClient>, c
   await updateCartTotals(admin, cartId)
 }
 
-async function clearCartItems(admin: ReturnType<typeof createAdminClient>, cartId: string) {
+async function clearCartItems(admin: AdminClient, cartId: string) {
   await admin.from("cart_items").delete().eq("cart_id", cartId)
   await updateCartTotals(admin, cartId)
 }
 
-async function mergeGuestCart(admin: ReturnType<typeof createAdminClient>, guestId: string, userId: string) {
+async function mergeGuestCart(admin: AdminClient, guestId: string, userId: string) {
   // Use a transactional RPC on the DB to perform the merge atomically.
-  const { data, error } = await admin.rpc("merge_guest_cart", {
+  const { error } = await admin.rpc("merge_guest_cart", {
     guest_id_text: guestId,
     target_user_id: userId,
   })
@@ -262,7 +272,7 @@ async function mergeGuestCart(admin: ReturnType<typeof createAdminClient>, guest
   }
 }
 
-async function getOrCreateCart(admin: ReturnType<typeof createAdminClient>, user: any, guestId?: string) {
+async function getOrCreateCart(admin: AdminClient, user: any, guestId?: string) {
   if (user?.id) {
     return getOrCreateUserCart(admin, user.id)
   }
@@ -274,7 +284,7 @@ async function getOrCreateCart(admin: ReturnType<typeof createAdminClient>, user
   return getOrCreateGuestCart(admin, guestId)
 }
 
-async function getCartResponse(admin: ReturnType<typeof createAdminClient>, cartId: string) {
+async function getCartResponse(admin: AdminClient, cartId: string) {
   return getCartPayload(admin, cartId)
 }
 
@@ -293,7 +303,8 @@ async function handleCurrentCart(req: NextRequest) {
     await mergeGuestCart(admin, guestId, user.id)
     const response = await getCartResponse(admin, (await getOrCreateUserCart(admin, user.id)).cartId)
     const nextResponse = buildResponse(response)
-    nextResponse.cookies.delete(GUEST_COOKIE, { path: "/" })
+    // FIX: Next.js 15 cookies.delete() accepts a single options object, not (name, options)
+    nextResponse.cookies.delete({ name: GUEST_COOKIE, path: "/" })
     return nextResponse
   }
 

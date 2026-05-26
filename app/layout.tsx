@@ -1,6 +1,5 @@
 import "./globals.css"
 import { ThemeProvider } from "@/components/ui/theme-provider"
-import Script from "next/script"
 import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { CartDrawer } from "@/components/cart-drawer"
@@ -16,7 +15,7 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
 })
 
-// Theme is handled by `next-themes` ThemeProvider (components/ui/theme-provider.tsx)
+// Theme is handled by a custom client-side ThemeProvider (components/ui/theme-provider.tsx)
 
 export const metadata: Metadata = {
   title: "Destaque premium | Vestindo a Quebrada",

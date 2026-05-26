@@ -1,10 +1,11 @@
 /**
- * Product database cache layer
- * In-memory cache with TTL to avoid repeated DB queries
+ * Product database layer
+ * Async functions backed by Supabase.
+ * All functions return safe fallback values if Supabase is unavailable.
  */
 
 import { createClient } from "@/lib/supabase/client"
-import type { StoreProduct, ProductColor, ProductVariants } from "@/lib/types/product"
+import type { StoreProduct, ProductColor } from "@/lib/types/product"
 
 export interface DBProduct {
   id: string
@@ -48,12 +49,14 @@ function dbProductToStoreProduct(dbProduct: DBProduct): StoreProduct {
 
 /**
  * Fetch product by ID (supports both UUID and legacy_id)
+ * Returns undefined if Supabase is unavailable or product not found.
  */
 export async function getProductFromDB(
   id: string
 ): Promise<StoreProduct | undefined> {
   try {
     const supabase = createClient()
+    if (!supabase) return undefined
 
     // Try legacy_id first (backwards compat)
     let { data } = await supabase
@@ -86,12 +89,14 @@ export async function getProductFromDB(
 
 /**
  * Fetch product by slug (SEO-friendly)
+ * Returns undefined if Supabase is unavailable or product not found.
  */
 export async function getProductBySlug(
   slug: string
 ): Promise<StoreProduct | undefined> {
   try {
     const supabase = createClient()
+    if (!supabase) return undefined
 
     const { data } = await supabase
       .from("products")
@@ -113,12 +118,14 @@ export async function getProductBySlug(
 
 /**
  * Fetch all products in a category
+ * Returns [] if Supabase is unavailable or no products found.
  */
 export async function getProductsByCategory(
   category: string
 ): Promise<StoreProduct[]> {
   try {
     const supabase = createClient()
+    if (!supabase) return []
 
     const { data } = await supabase
       .from("products")
@@ -140,6 +147,7 @@ export async function getProductsByCategory(
 
 /**
  * Search products by title or description
+ * Returns [] if Supabase is unavailable.
  */
 export async function searchProductsDB(
   query: string,
@@ -147,6 +155,7 @@ export async function searchProductsDB(
 ): Promise<StoreProduct[]> {
   try {
     const supabase = createClient()
+    if (!supabase) return []
 
     const { data } = await supabase
       .from("products")
@@ -168,10 +177,12 @@ export async function searchProductsDB(
 
 /**
  * Get all products (for catalog)
+ * Returns [] if Supabase is unavailable.
  */
 export async function getAllProductsFromDB(): Promise<StoreProduct[]> {
   try {
     const supabase = createClient()
+    if (!supabase) return []
 
     const { data } = await supabase
       .from("products")
