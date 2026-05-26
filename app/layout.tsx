@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Destaque Premium | Moda Masculina",
   description:
-    "Destaque Premium — Curadoria de moda masculina. Chinelos Kenner, Bonés Lacoste, Camisas de Time e Seleção Brasileira. Qualidade e estilo para o visual masculino.",
+    "Há mais de 10 anos vestindo a quebrada com o melhor da moda masculina. Chinelos Kenner, Bonés Lacoste, Camisas de Time e Seleção Brasileira.",
   keywords: [
     "moda masculina",
     "streetwear",

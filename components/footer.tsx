@@ -50,8 +50,8 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-muted-foreground mb-6 max-w-sm">
-              Moda masculina com identidade. Produtos selecionados para
-              quem constrói o próprio estilo.
+              Há mais de 10 anos vestindo a quebrada com o melhor da
+              moda masculina.
             </p>
             
             {/* Social Links */}

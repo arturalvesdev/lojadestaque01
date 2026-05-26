@@ -34,8 +34,8 @@ export function Hero() {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 text-pretty"
           >
-            Curadoria de moda masculina. Essenciais premium com estilo
-            próprio — para quem sabe o que quer e não aceita menos.
+            Há mais de 10 anos vestindo a quebrada com o melhor da moda
+            masculina. Estilo próprio — para quem sabe o que quer.
           </motion.p>
 
           {/* CTA Button */}
