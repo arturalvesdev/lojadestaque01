@@ -34,8 +34,8 @@ export function Hero() {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 text-pretty"
           >
-            Vestindo a quebrada há mais de 10 anos. Referência em Morato, 
-            produtos premium com qualidade e estilo que você merece.
+            Curadoria de moda masculina. Essenciais premium com estilo
+            próprio — para quem sabe o que quer e não aceita menos.
           </motion.p>
 
           {/* CTA Button */}

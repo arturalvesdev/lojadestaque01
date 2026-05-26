@@ -50,8 +50,8 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-muted-foreground mb-6 max-w-sm">
-              A mais de 10 anos vestindo a quebrada. Qualidade e estilo 
-              para quem sabe o que quer.
+              Moda masculina com identidade. Produtos selecionados para
+              quem constrói o próprio estilo.
             </p>
             
             {/* Social Links */}

@@ -18,16 +18,18 @@ const geistMono = Geist_Mono({
 // Theme is handled by a custom client-side ThemeProvider (components/ui/theme-provider.tsx)
 
 export const metadata: Metadata = {
-  title: "Destaque premium | Vestindo a Quebrada",
+  title: "Destaque Premium | Moda Masculina",
   description:
-    "Destaque premium - A mais de 10 anos vestindo a quebrada. Referência em Morato. Chinelos Kenner, Bonés Lacoste, Camisas de Time e Seleção Brasileira.",
+    "Destaque Premium — Curadoria de moda masculina. Chinelos Kenner, Bonés Lacoste, Camisas de Time e Seleção Brasileira. Qualidade e estilo para o visual masculino.",
   keywords: [
+    "moda masculina",
+    "streetwear",
     "chinelos kenner",
     "bonés lacoste",
     "camisas de time",
     "seleção brasileira",
-    "francisco morato",
-    "streetwear",
+    "moda urbana",
+    "estilo masculino",
   ],
   authors: [{ name: "Destaque premium" }],
   icons: {

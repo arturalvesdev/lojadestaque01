@@ -73,8 +73,8 @@ export function Collections() {
             Nosso Catálogo
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
-            Vestindo a quebrada, referência em Morato. 
-            Produtos premium com qualidade garantida.
+            Peças selecionadas para o visual masculino. Curadoria com
+            foco em qualidade, estilo e identidade.
           </p>
         </motion.div>
 
