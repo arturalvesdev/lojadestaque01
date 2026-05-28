@@ -5,8 +5,9 @@
  */
 
 import { motion } from "framer-motion"
+import Image from "next/image"
 import Link from "next/link"
-import { ArrowLeft, Heart, ShoppingBag, Minus, Plus } from "lucide-react"
+import { ArrowLeft, Heart, Play, ShoppingBag, Minus, Plus } from "lucide-react"
 import { useState, use } from "react"
 import { toast } from "sonner"
 import { useCart } from "@/contexts/cart-context"
@@ -19,6 +20,18 @@ import {
   buildProductWhatsAppMessage,
   openWhatsApp,
 } from "@/lib/whatsapp/messages"
+import type { StoreProduct } from "@/lib/types/product"
+
+type MediaItem = { type: "image" | "video"; src: string }
+
+function buildMediaItems(product: StoreProduct): MediaItem[] {
+  const images = product.images ?? (product.image ? [product.image] : [])
+  const items: MediaItem[] = images.map((src) => ({ type: "image", src }))
+  if (product.video) {
+    items.push({ type: "video", src: product.video })
+  }
+  return items
+}
 
 export default function ProductPage({
   params,
@@ -29,6 +42,7 @@ export default function ProductPage({
   const [quantity, setQuantity] = useState(1)
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
   const [selectedColor, setSelectedColor] = useState<string | null>(null)
+  const [activeIndex, setActiveIndex] = useState(0)
   const { addItem } = useCart()
 
   const product = getProductById(id)
@@ -43,6 +57,9 @@ export default function ProductPage({
       </main>
     )
   }
+
+  const mediaItems = buildMediaItems(product)
+  const activeItem = mediaItems[activeIndex] ?? null
 
   /** Adiciona à sacola (exige login + tamanho + cor) */
   const handleAddToCart = () => {
@@ -88,18 +105,76 @@ export default function ProductPage({
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* ── Media gallery ── */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-            <div className="aspect-square rounded-2xl overflow-hidden bg-secondary">
-              <div className="w-full h-full flex items-center justify-center">
-                <span className="text-muted-foreground">Adicione imagem do produto</span>
-              </div>
+            {/* Main viewer */}
+            <div className="relative aspect-square rounded-2xl overflow-hidden bg-secondary">
+              {activeItem?.type === "image" ? (
+                <Image
+                  src={activeItem.src}
+                  alt={product.name}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover"
+                  priority
+                />
+              ) : activeItem?.type === "video" ? (
+                <video
+                  key={activeItem.src}
+                  src={activeItem.src}
+                  controls
+                  muted
+                  playsInline
+                  className="w-full h-full object-contain bg-black"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <span className="text-muted-foreground text-sm">Sem imagem</span>
+                </div>
+              )}
             </div>
+
+            {/* Thumbnail strip */}
+            {mediaItems.length > 1 && (
+              <div className="flex gap-2 mt-3 overflow-x-auto pb-1">
+                {mediaItems.map((item, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => setActiveIndex(i)}
+                    className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-colors ${
+                      i === activeIndex
+                        ? "border-primary"
+                        : "border-transparent hover:border-border"
+                    }`}
+                    aria-label={item.type === "video" ? "Ver vídeo" : `Ver imagem ${i + 1}`}
+                  >
+                    {item.type === "image" ? (
+                      <div className="relative w-full h-full">
+                        <Image
+                          src={item.src}
+                          alt=""
+                          fill
+                          sizes="64px"
+                          className="object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-full h-full bg-secondary flex items-center justify-center">
+                        <Play className="w-5 h-5 text-muted-foreground" />
+                      </div>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
           </motion.div>
 
+          {/* ── Product info ── */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}

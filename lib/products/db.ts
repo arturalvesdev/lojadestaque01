@@ -44,6 +44,7 @@ function dbProductToStoreProduct(dbProduct: DBProduct): StoreProduct {
       sizes: dbProduct.sizes,
       colors: dbProduct.colors,
     },
+    image: dbProduct.featured_image ?? undefined,
   }
 }
 

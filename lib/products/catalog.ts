@@ -70,81 +70,146 @@ export const storeProducts: Record<string, StoreProduct> = {
     description:
       "Chinelo Kenner Sunset com cores vibrantes e palmilha macia. Estilo para o verão.",
   }),
-  "kenner-1": product({
-    id: "kenner-1",
-    name: "Chinelo Kenner Kivah NK5",
+  // ─── Kenner NK6 ──────────────────────────────────────────────────────────────
+  "kenner-nk6-offwhite-azul-royal": product({
+    id: "kenner-nk6-offwhite-azul-royal",
+    name: "Kenner NK6 Off-White / Azul Royal",
     price: 189.9,
     category: "Chinelos Kenner",
+    image: "/products/kenner/kenner-nk6-offwhite-azul-royal/frontal.png",
+    images: [
+      "/products/kenner/kenner-nk6-offwhite-azul-royal/frontal.png",
+      "/products/kenner/kenner-nk6-offwhite-azul-royal/lateral.png",
+      "/products/kenner/kenner-nk6-offwhite-azul-royal/perspectiva.png",
+      "/products/kenner/kenner-nk6-offwhite-azul-royal/sola.png",
+    ],
+    video: "/products/kenner/kenner-nk6-offwhite-azul-royal/video.mp4",
     description:
-      "O clássico Kenner Kivah NK5 com palmilha anatômica e design moderno. Conforto para o dia todo.",
+      "Chinelo Kenner NK6 nas cores off-white e azul royal. Design premium com palmilha anatômica e acabamento sofisticado.",
+    variants: {
+      sizes: ["37", "38", "39", "40", "41", "42", "43", "44"],
+      colors: [
+        { name: "Off-White", hex: "#F5F0E8" },
+        { name: "Azul Royal", hex: "#3A5DC8" },
+      ],
+    },
   }),
-  "kenner-2": product({
-    id: "kenner-2",
-    name: "Chinelo Kenner Amp Turbo",
-    price: 159.9,
-    category: "Chinelos Kenner",
-    description:
-      "Chinelo Kenner Amp Turbo com tecnologia de amortecimento superior. Ideal para caminhadas longas.",
-  }),
-  "kenner-3": product({
-    id: "kenner-3",
-    name: "Chinelo Kenner Sunset",
-    price: 139.9,
-    category: "Chinelos Kenner",
-    description:
-      "Chinelo Kenner Sunset com cores vibrantes e palmilha macia. Estilo para o verão.",
-  }),
-  "kenner-4": product({
-    id: "kenner-4",
-    name: "Chinelo Kenner Action X1",
-    price: 179.9,
-    category: "Chinelos Kenner",
-    description:
-      "Kenner Action X1 com design esportivo e sola antiderrapante. Perfeito para aventuras.",
-  }),
-  "kenner-5": product({
-    id: "kenner-5",
-    name: "Chinelo Kenner Leve TRK",
-    price: 149.9,
-    category: "Chinelos Kenner",
-    description: "Kenner Leve TRK ultra leve com máximo conforto. Tecnologia de ponta para seus pés.",
-  }),
-  "kenner-6": product({
-    id: "kenner-6",
-    name: "Chinelo Kenner Rhaco S",
-    price: 199.9,
-    category: "Chinelos Kenner",
-    description:
-      "Kenner Rhaco S premium com acabamento sofisticado. Estilo e qualidade em cada detalhe.",
-  }),
-  "kenner-7": product({
-    id: "kenner-7",
-    name: "Chinelo Kenner NK5 Preto",
+  "kenner-nk6-preto-grafite": product({
+    id: "kenner-nk6-preto-grafite",
+    name: "Kenner NK6 Preto / Grafite",
     price: 189.9,
     category: "Chinelos Kenner",
-    description: "Kenner NK5 na cor preta clássica. Versatilidade e elegância para qualquer ocasião.",
+    image: "/products/kenner/kenner-nk6-preto-grafite/principal.png",
+    images: [
+      "/products/kenner/kenner-nk6-preto-grafite/principal.png",
+      "/products/kenner/kenner-nk6-preto-grafite/frontal.png",
+      "/products/kenner/kenner-nk6-preto-grafite/lateral.png",
+      "/products/kenner/kenner-nk6-preto-grafite/perspectiva.png",
+    ],
+    video: "/products/kenner/kenner-nk6-preto-grafite/video.mp4",
+    description:
+      "Chinelo Kenner NK6 nas cores preto e grafite. Estilo clássico com palmilha de alta absorção e durabilidade premium.",
+    variants: {
+      sizes: ["37", "38", "39", "40", "41", "42", "43", "44"],
+      colors: [
+        { name: "Preto", hex: "#1a1a1a" },
+        { name: "Grafite", hex: "#555555" },
+      ],
+    },
   }),
-  "kenner-8": product({
-    id: "kenner-8",
-    name: "Chinelo Kenner Kivah Caramelo",
+  "kenner-nk6-vermelho-preto": product({
+    id: "kenner-nk6-vermelho-preto",
+    name: "Kenner NK6 Vermelho / Preto",
     price: 189.9,
     category: "Chinelos Kenner",
+    image: "/products/kenner/kenner-nk6-vermelho-preto/principal.png",
+    images: [
+      "/products/kenner/kenner-nk6-vermelho-preto/principal.png",
+      "/products/kenner/kenner-nk6-vermelho-preto/frontal.png",
+      "/products/kenner/kenner-nk6-vermelho-preto/lateral.png",
+      "/products/kenner/kenner-nk6-vermelho-preto/sola.png",
+    ],
+    video: "/products/kenner/kenner-nk6-vermelho-preto/video.mp4",
     description:
-      "Kenner Kivah na cor caramelo sofisticada. Combina com tudo e oferece conforto premium.",
+      "Chinelo Kenner NK6 nas cores vermelho e preto. Design arrojado com palmilha anatômica e solado resistente.",
+    variants: {
+      sizes: ["37", "38", "39", "40", "41", "42", "43", "44"],
+      colors: [
+        { name: "Vermelho", hex: "#CC1100" },
+        { name: "Preto", hex: "#1a1a1a" },
+      ],
+    },
   }),
-  "kenner-9": product({
-    id: "kenner-9",
-    name: "Chinelo Kenner TRK Marrom",
+  // ─── Kenner Summer ────────────────────────────────────────────────────────────
+  "kenner-summer-azul-royal-branco": product({
+    id: "kenner-summer-azul-royal-branco",
+    name: "Kenner Summer Azul Royal / Branco",
     price: 169.9,
     category: "Chinelos Kenner",
-    description: "Kenner TRK Marrom com design robusto e durabilidade excepcional. Feito para durar.",
+    image: "/products/kenner/kenner-summer-azul-royal-branco/principal.png",
+    images: [
+      "/products/kenner/kenner-summer-azul-royal-branco/principal.png",
+      "/products/kenner/kenner-summer-azul-royal-branco/frontal.png",
+      "/products/kenner/kenner-summer-azul-royal-branco/lateral.png",
+      "/products/kenner/kenner-summer-azul-royal-branco/perspectiva.png",
+      "/products/kenner/kenner-summer-azul-royal-branco/full-view.png",
+    ],
+    video: "/products/kenner/kenner-summer-azul-royal-branco/video.mp4",
+    description:
+      "Chinelo Kenner Summer nas cores azul royal e branco. Leve, fresco e estiloso para os dias quentes.",
+    variants: {
+      sizes: ["37", "38", "39", "40", "41", "42", "43", "44"],
+      colors: [
+        { name: "Azul Royal", hex: "#3A5DC8" },
+        { name: "Branco", hex: "#F5F5F5" },
+      ],
+    },
   }),
-  "kenner-10": product({
-    id: "kenner-10",
-    name: "Chinelo Kenner Summer Edition",
-    price: 209.9,
+  "kenner-summer-branco-preto": product({
+    id: "kenner-summer-branco-preto",
+    name: "Kenner Summer Branco / Preto",
+    price: 169.9,
     category: "Chinelos Kenner",
-    description: "Edição especial de verão Kenner. Cores exclusivas e conforto incomparável.",
+    image: "/products/kenner/kenner-summer-branco-preto/principal.png",
+    images: [
+      "/products/kenner/kenner-summer-branco-preto/principal.png",
+      "/products/kenner/kenner-summer-branco-preto/frontal.png",
+      "/products/kenner/kenner-summer-branco-preto/lateral.png",
+      "/products/kenner/kenner-summer-branco-preto/perspectiva.png",
+    ],
+    video: "/products/kenner/kenner-summer-branco-preto/video.mp4",
+    description:
+      "Chinelo Kenner Summer nas cores branco e preto. Combinação clássica com o conforto do modelo Summer.",
+    variants: {
+      sizes: ["37", "38", "39", "40", "41", "42", "43", "44"],
+      colors: [
+        { name: "Branco", hex: "#F5F5F5" },
+        { name: "Preto", hex: "#1a1a1a" },
+      ],
+    },
+  }),
+  "kenner-summer-preto-branco": product({
+    id: "kenner-summer-preto-branco",
+    name: "Kenner Summer Preto / Branco",
+    price: 169.9,
+    category: "Chinelos Kenner",
+    image: "/products/kenner/kenner-summer-preto-branco/principal.png",
+    images: [
+      "/products/kenner/kenner-summer-preto-branco/principal.png",
+      "/products/kenner/kenner-summer-preto-branco/frontal.png",
+      "/products/kenner/kenner-summer-preto-branco/lateral.png",
+      "/products/kenner/kenner-summer-preto-branco/perspectiva.png",
+    ],
+    video: "/products/kenner/kenner-summer-preto-branco/video.mp4",
+    description:
+      "Chinelo Kenner Summer nas cores preto e branco. Versatilidade e estilo para qualquer ocasião.",
+    variants: {
+      sizes: ["37", "38", "39", "40", "41", "42", "43", "44"],
+      colors: [
+        { name: "Preto", hex: "#1a1a1a" },
+        { name: "Branco", hex: "#F5F5F5" },
+      ],
+    },
   }),
   "bone-1": product({
     id: "bone-1",

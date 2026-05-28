@@ -10,7 +10,7 @@ const GUEST_SESSION_TTL_SECONDS = 30 * 24 * 60 * 60
 type AdminClient = NonNullable<ReturnType<typeof createAdminClient>>
 
 function buildCartLineId(productId: string, size: string, color: string) {
-  return `${productId}_${size}_${color}`
+  return `${productId}::${size}::${color}`
 }
 
 function buildGuestId() {
@@ -78,10 +78,14 @@ async function getOrCreateGuestSession(admin: AdminClient, guestId?: string) {
   }
 
   const newGuestId = buildGuestId()
-  await admin.from("guest_sessions").insert({
+  const { error: insertError } = await admin.from("guest_sessions").insert({
     guest_id: newGuestId,
     expires_at: expiresAt,
   })
+
+  if (insertError) {
+    throw new Error(`Failed to create guest session: ${insertError.message}`)
+  }
 
   return newGuestId
 }
@@ -293,7 +297,7 @@ async function handleCurrentCart(req: NextRequest) {
   const admin = createAdminClient()
 
   if (!admin) {
-    return NextResponse.json({ error: "Server missing SUPABASE_SERVICE_ROLE_KEY" }, { status: 500 })
+    return NextResponse.json({ id: "guest:fallback", items: [], subtotalCents: 0, itemCount: 0 })
   }
 
   const guestCookie = req.cookies.get(GUEST_COOKIE)?.value
@@ -320,8 +324,8 @@ export async function GET(req: NextRequest) {
   try {
     return await handleCurrentCart(req)
   } catch (error) {
-    console.error(error)
-    return NextResponse.json({ error: "Failed to load cart" }, { status: 500 })
+    console.error("[cart GET]", error)
+    return NextResponse.json({ id: "guest:fallback", items: [], subtotalCents: 0, itemCount: 0 })
   }
 }
 

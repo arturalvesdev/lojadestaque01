@@ -1,21 +1,21 @@
 "use client"
 
 import { motion } from "framer-motion"
+import Image from "next/image"
 import Link from "next/link"
 import { ArrowLeft, Heart, ShoppingBag } from "lucide-react"
+import { storeProducts } from "@/lib/products/catalog"
 
-const kennerProducts = [
-  { id: "kenner-1", name: "Chinelo Kenner Kivah NK5", price: 189.90 },
-  { id: "kenner-2", name: "Chinelo Kenner Amp Turbo", price: 159.90 },
-  { id: "kenner-3", name: "Chinelo Kenner Sunset", price: 139.90 },
-  { id: "kenner-4", name: "Chinelo Kenner Action X1", price: 179.90 },
-  { id: "kenner-5", name: "Chinelo Kenner Leve TRK", price: 149.90 },
-  { id: "kenner-6", name: "Chinelo Kenner Rhaco S", price: 199.90 },
-  { id: "kenner-7", name: "Chinelo Kenner NK5 Preto", price: 189.90 },
-  { id: "kenner-8", name: "Chinelo Kenner Kivah Caramelo", price: 189.90 },
-  { id: "kenner-9", name: "Chinelo Kenner TRK Marrom", price: 169.90 },
-  { id: "kenner-10", name: "Chinelo Kenner Summer Edition", price: 209.90 },
+const KENNER_IDS = [
+  "kenner-nk6-offwhite-azul-royal",
+  "kenner-nk6-preto-grafite",
+  "kenner-nk6-vermelho-preto",
+  "kenner-summer-azul-royal-branco",
+  "kenner-summer-branco-preto",
+  "kenner-summer-preto-branco",
 ]
+
+const kennerProducts = KENNER_IDS.map((id) => storeProducts[id]).filter(Boolean)
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -38,13 +38,11 @@ export default function ChinelosKennerPage() {
   return (
     <main className="min-h-screen bg-background pt-24">
       <div className="container mx-auto px-4 py-12">
-        {/* Back Button */}
         <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8">
           <ArrowLeft className="w-4 h-4" />
           Voltar
         </Link>
 
-        {/* Page Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -55,31 +53,35 @@ export default function ChinelosKennerPage() {
             Chinelos Kenner
           </h1>
           <p className="text-muted-foreground max-w-xl">
-            Os melhores chinelos Kenner com conforto e estilo. 
+            Os melhores chinelos Kenner com conforto e estilo.
             Qualidade premium para o seu dia a dia.
           </p>
         </motion.div>
 
-        {/* Products Grid */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
         >
           {kennerProducts.map((product) => (
             <Link key={product.id} href={`/produto/${product.id}`}>
-              <motion.div
-                variants={itemVariants}
-                className="group cursor-pointer"
-              >
-                {/* Product Image Placeholder */}
+              <motion.div variants={itemVariants} className="group cursor-pointer">
                 <div className="relative aspect-square rounded-2xl overflow-hidden bg-secondary mb-4">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-muted-foreground text-xs">Adicione imagem</span>
-                  </div>
+                  {product.image ? (
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-muted-foreground text-xs">Sem imagem</span>
+                    </div>
+                  )}
 
-                  {/* Quick Actions */}
                   <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                     <motion.button
                       whileHover={{ scale: 1.1 }}
@@ -102,7 +104,6 @@ export default function ChinelosKennerPage() {
                   </div>
                 </div>
 
-                {/* Product Info */}
                 <div className="space-y-2">
                   <span className="text-xs text-muted-foreground uppercase tracking-wider">
                     Chinelos Kenner
@@ -114,6 +115,11 @@ export default function ChinelosKennerPage() {
                     <span className="text-lg font-bold text-foreground">
                       R$ {product.price.toFixed(2).replace(".", ",")}
                     </span>
+                    {product.originalPrice && (
+                      <span className="text-sm text-muted-foreground line-through">
+                        R$ {product.originalPrice.toFixed(2).replace(".", ",")}
+                      </span>
+                    )}
                   </div>
                 </div>
               </motion.div>
