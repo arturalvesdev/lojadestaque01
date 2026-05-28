@@ -54,14 +54,18 @@ export function Header() {
 
             {/* Logo */}
             <Link href="/" className="flex items-center">
-              <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.15 }}>
+              <motion.div
+                whileHover={{ scale: 1.07 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+              >
                 {/* Mobile: DP symbol */}
                 <Image
                   src="/branding/logomarcaDP.png"
                   alt="Destaque Premium"
                   width={400}
                   height={400}
-                  className="block md:hidden h-11 w-auto dark:invert"
+                  className="block md:hidden h-12 w-auto dark:invert"
                   priority
                 />
                 {/* Desktop: full logo */}
@@ -70,7 +74,7 @@ export function Header() {
                   alt="Destaque Premium"
                   width={860}
                   height={288}
-                  className="hidden md:block h-14 w-auto dark:invert"
+                  className="hidden md:block h-16 w-auto dark:invert"
                   priority
                 />
               </motion.div>

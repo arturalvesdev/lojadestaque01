@@ -55,13 +55,19 @@ export function Footer() {
           {/* Brand Column */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-block mb-6">
-              <Image
-                src="/branding/logomarcaDestaquecompleta.png"
-                alt="Destaque Premium"
-                width={860}
-                height={288}
-                className="h-10 w-auto dark:invert"
-              />
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+              >
+                <Image
+                  src="/branding/logomarcaDestaquecompleta.png"
+                  alt="Destaque Premium"
+                  width={860}
+                  height={288}
+                  className="h-12 w-auto dark:invert"
+                />
+              </motion.div>
             </Link>
             <p className="text-muted-foreground mb-6 max-w-sm">
               Há mais de 10 anos vestindo a quebrada com o melhor da
