@@ -4,6 +4,7 @@ import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { CartDrawer } from "@/components/cart-drawer"
 import { Providers } from "@/components/providers"
+import { WhatsAppFloat } from "@/components/whatsapp-float"
 
 const geist = Geist({
   subsets: ["latin"],
@@ -58,6 +59,7 @@ export default function RootLayout({
           <Providers>
             {children}
             <CartDrawer />
+            <WhatsAppFloat />
           </Providers>
         </ThemeProvider>
       </body>

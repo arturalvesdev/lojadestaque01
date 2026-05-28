@@ -19,6 +19,7 @@ import { useCart } from "@/contexts/cart-context"
 import { useFavorites } from "@/contexts/favorites-context"
 import { getProductById } from "@/lib/products"
 import { ProductOptions, areOptionsSelected } from "@/components/product/product-options"
+import { TrustStrip } from "@/components/trust-section"
 import {
   buildProductWhatsAppMessage,
   openWhatsApp,
@@ -333,6 +334,8 @@ export default function ProductPage({
               </svg>
               Comprar pelo WhatsApp
             </button>
+
+            <TrustStrip />
           </motion.div>
         </div>
       </div>
