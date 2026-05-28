@@ -34,8 +34,9 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Destaque premium" }],
   icons: {
-    icon: "/icon.svg",
-    apple: "/icon.svg",
+    icon: "/branding/logomarcaDP.png",
+    shortcut: "/branding/logomarcaDP.png",
+    apple: "/branding/logomarcaDP.png",
   },
 }
 

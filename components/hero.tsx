@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import { ArrowRight } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 
 export function Hero() {
   return (
@@ -10,6 +11,17 @@ export function Hero() {
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-[url('/images/fundo_destaque.svg')] bg-cover bg-center brightness-95" />
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-background/40 to-background" />
+        {/* DP watermark — very subtle brand presence */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
+          <Image
+            src="/branding/logomarcaDP.png"
+            alt=""
+            width={400}
+            height={400}
+            className="w-64 h-64 md:w-80 md:h-80 object-contain opacity-[0.04] invert"
+            aria-hidden="true"
+          />
+        </div>
       </div>
 
       {/* Content */}

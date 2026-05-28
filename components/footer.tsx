@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import Link from "next/link"
+import Image from "next/image"
 import { MapPin, Phone, Clock } from "lucide-react"
 
 function InstagramIcon({ className }: { className?: string }) {
@@ -54,10 +55,13 @@ export function Footer() {
           {/* Brand Column */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-block mb-6">
-              <span className="text-2xl font-bold tracking-tighter">
-                <span className="text-foreground">DESTAQUE</span>
-                <span className="text-primary">PREMIUM</span>
-              </span>
+              <Image
+                src="/branding/logomarcaDestaquecompleta.png"
+                alt="Destaque Premium"
+                width={860}
+                height={288}
+                className="h-8 w-auto dark:invert"
+              />
             </Link>
             <p className="text-muted-foreground mb-6 max-w-sm">
               Há mais de 10 anos vestindo a quebrada com o melhor da

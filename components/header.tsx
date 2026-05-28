@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion"
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { Menu, X, ShoppingBag, Search, User, Heart } from "lucide-react"
 import { useCart } from "@/contexts/cart-context"
 import { useAuth } from "@/contexts/auth-context"
@@ -52,13 +53,26 @@ export function Header() {
             </button>
 
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                className="text-2xl md:text-3xl font-bold tracking-tighter"
-              >
-                <span className="text-foreground">DESTAQUE</span>
-                <span className="text-primary">PREMIUM</span>
+            <Link href="/" className="flex items-center">
+              <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.15 }}>
+                {/* Mobile: DP symbol */}
+                <Image
+                  src="/branding/logomarcaDP.png"
+                  alt="Destaque Premium"
+                  width={400}
+                  height={400}
+                  className="block md:hidden h-9 w-auto dark:invert"
+                  priority
+                />
+                {/* Desktop: full logo */}
+                <Image
+                  src="/branding/logomarcaDestaquecompleta.png"
+                  alt="Destaque Premium"
+                  width={860}
+                  height={288}
+                  className="hidden md:block h-9 w-auto dark:invert"
+                  priority
+                />
               </motion.div>
             </Link>
 
