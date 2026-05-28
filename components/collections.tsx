@@ -10,34 +10,42 @@ const collections = [
   {
     id: 1,
     name: "Chinelos Kenner",
+    abbr: "NK",
     category: "Chinelos Kenner",
     description: "Conforto e estilo",
     href: "/catalogo/chinelos-kenner",
     image: "/products/kenner/kenner-summer-preto-branco/principal.png",
+    gradient: "bg-gradient-to-br from-secondary via-muted/50 to-card",
   },
   {
     id: 2,
     name: "Bonés Lacoste",
+    abbr: "BL",
     category: "Bonés Lacoste",
     description: "Esporte premium",
     href: "/catalogo/bones-lacoste",
     image: null,
+    gradient: "bg-gradient-to-br from-secondary via-emerald-950/30 to-card",
   },
   {
     id: 3,
     name: "Camisas de Time",
+    abbr: "CT",
     category: "Camisas de Time",
     description: "Vista seu clube",
     href: "/catalogo/camisas-time",
     image: null,
+    gradient: "bg-gradient-to-br from-secondary via-blue-950/25 to-card",
   },
   {
     id: 4,
     name: "Seleção Brasileira",
+    abbr: "SB",
     category: "Seleção Brasileira",
     description: "Orgulho nacional",
     href: "/catalogo/selecao-brasileira",
     image: null,
+    gradient: "bg-gradient-to-br from-secondary via-yellow-950/25 to-card",
   },
 ]
 
@@ -117,9 +125,9 @@ export function Collections() {
                         unoptimized
                       />
                     ) : (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-muted-foreground text-xs text-center px-4">
-                          {collection.name}
+                      <div className={`absolute inset-0 ${collection.gradient} overflow-hidden`}>
+                        <span className="absolute inset-0 flex items-center justify-center font-black text-[100px] leading-none tracking-tighter select-none text-foreground/[0.05] pointer-events-none">
+                          {collection.abbr}
                         </span>
                       </div>
                     )}

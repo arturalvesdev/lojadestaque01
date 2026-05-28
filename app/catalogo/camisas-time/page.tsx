@@ -2,29 +2,24 @@
 
 import { motion } from "framer-motion"
 import Link from "next/link"
-import { ArrowLeft, Heart, ShoppingBag } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
+import { storeProducts } from "@/lib/products/catalog"
+import { ProductCard } from "@/components/product/product-card"
 
-const products = [
-  { id: "time-1", name: "Camisa Flamengo 2024", price: 279.90 },
-  { id: "time-2", name: "Camisa Corinthians 2024", price: 279.90 },
-  { id: "time-3", name: "Camisa Palmeiras 2024", price: 279.90 },
-  { id: "time-4", name: "Camisa São Paulo 2024", price: 279.90 },
-  { id: "time-5", name: "Camisa Santos 2024", price: 269.90 },
-  { id: "time-6", name: "Camisa Vasco 2024", price: 269.90 },
-  { id: "time-7", name: "Camisa Grêmio 2024", price: 279.90 },
-  { id: "time-8", name: "Camisa Internacional 2024", price: 279.90 },
-]
+const camisasProducts = Object.values(storeProducts).filter(
+  (p) => p.category === "Camisas de Time"
+)
 
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.1 },
+    transition: { staggerChildren: 0.08 },
   },
 }
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 24 },
   visible: {
     opacity: 1,
     y: 0,
@@ -36,7 +31,7 @@ export default function CamisasTimePage() {
   return (
     <main className="min-h-screen bg-background pt-24">
       <div className="container mx-auto px-4 py-12">
-        <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8">
+        <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-10">
           <ArrowLeft className="w-4 h-4" />
           Voltar
         </Link>
@@ -47,12 +42,14 @@ export default function CamisasTimePage() {
           transition={{ duration: 0.6 }}
           className="mb-12"
         >
-          <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-foreground mb-4">
+          <span className="text-sm font-medium text-primary tracking-wider uppercase mb-3 block">
+            Coleção
+          </span>
+          <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-foreground mb-3">
             Camisas de Time
           </h1>
           <p className="text-muted-foreground max-w-xl">
-            Vista seu clube do coração. Camisas oficiais com qualidade 
-            premium para torcedores de verdade.
+            Cada camisa carrega uma história. Vista seu clube com o orgulho de quem torce de verdade — qualidade premium do primeiro ao último jogo.
           </p>
         </motion.div>
 
@@ -60,31 +57,16 @@ export default function CamisasTimePage() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8"
+          className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6"
         >
-          {products.map((product) => (
-            <Link key={product.id} href={`/produto/${product.id}`}>
-              <motion.div variants={itemVariants} className="group cursor-pointer">
-                <div className="relative aspect-square rounded-2xl overflow-hidden bg-secondary mb-4">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-muted-foreground text-xs">Adicione imagem</span>
-                  </div>
-                  <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} className="w-10 h-10 bg-background/90 backdrop-blur-sm rounded-full flex items-center justify-center text-foreground hover:text-primary transition-colors" onClick={(e) => e.preventDefault()}>
-                      <Heart className="w-5 h-5" />
-                    </motion.button>
-                    <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-primary-foreground" onClick={(e) => e.preventDefault()}>
-                      <ShoppingBag className="w-5 h-5" />
-                    </motion.button>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <span className="text-xs text-muted-foreground uppercase tracking-wider">Camisas de Time</span>
-                  <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">{product.name}</h3>
-                  <span className="text-lg font-bold text-foreground">R$ {product.price.toFixed(2).replace(".", ",")}</span>
-                </div>
-              </motion.div>
-            </Link>
+          {camisasProducts.map((product) => (
+            <motion.div key={product.id} variants={itemVariants}>
+              <ProductCard
+                product={product}
+                aspectRatio="portrait"
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              />
+            </motion.div>
           ))}
         </motion.div>
       </div>

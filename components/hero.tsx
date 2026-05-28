@@ -38,22 +38,49 @@ export function Hero() {
             masculina. Estilo próprio — para quem sabe o que quer.
           </motion.p>
 
-          {/* CTA Button */}
+          {/* Social proof */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.65 }}
+            className="flex items-center justify-center gap-2 mb-8"
+          >
+            <div className="flex gap-0.5">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <svg key={i} viewBox="0 0 24 24" className="w-4 h-4 fill-amber-400 text-amber-400" aria-hidden="true">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+              ))}
+            </div>
+            <span className="text-sm font-semibold text-foreground">4.9</span>
+            <span className="text-sm text-muted-foreground">· +500 clientes satisfeitos</span>
+          </motion.div>
+
+          {/* CTA Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.7 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-3"
           >
             <Link href="#collection">
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="group flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground font-semibold rounded-full hover:bg-primary/90 transition-colors mx-auto"
+                className="group flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground font-semibold rounded-full hover:bg-primary/90 transition-colors"
               >
                 Ver Catálogo
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </motion.button>
             </Link>
+            <a
+              href="https://wa.me/5511947824035?text=Ol%C3%A1%2C+vim+pelo+site+e+quero+saber+mais+sobre+os+produtos"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4"
+            >
+              Falar no WhatsApp
+            </a>
           </motion.div>
         </div>
       </div>
