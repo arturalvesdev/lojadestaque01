@@ -1,7 +1,7 @@
 "use client"
 
 import { motion, AnimatePresence } from "framer-motion"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Menu, X, ShoppingBag, Search, User, Heart } from "lucide-react"
 import { useCart } from "@/contexts/cart-context"
@@ -20,9 +20,16 @@ const navLinks = [
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const { totalItems, setIsOpen } = useCart()
   const { isAuthenticated } = useAuth()
   const { favoritesCount, setIsOpen: setFavoritesOpen } = useFavorites()
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20)
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
 
   return (
     <motion.header
@@ -32,7 +39,7 @@ export function Header() {
       className="fixed top-0 left-0 right-0 z-50"
     >
       {/* Main Navigation */}
-      <nav className="relative bg-background/80 backdrop-blur-xl border-b border-border/50">
+      <nav className={`relative backdrop-blur-xl border-b transition-all duration-300 ${scrolled ? "bg-background/95 border-border/50 shadow-sm" : "bg-background/70 border-transparent"}`}>
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Mobile Menu Button */}

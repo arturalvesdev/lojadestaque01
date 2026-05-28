@@ -24,6 +24,7 @@ export type StoreProduct = {
   category: string
   description: string
   variants: ProductVariants
+  badge?: string
   /** URL da imagem principal (relativa a /public) */
   image?: string
   /** URLs de todas as imagens em ordem de exibição */

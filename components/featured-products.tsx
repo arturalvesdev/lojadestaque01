@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Heart, ShoppingBag } from "lucide-react"
+import { Heart, ShoppingBag, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { useFavorites } from "@/contexts/favorites-context"
 
@@ -58,6 +58,13 @@ const products = [
   },
 ]
 
+function badgeClasses(badge: string): string {
+  if (badge === "Desconto") return "bg-accent text-accent-foreground"
+  if (badge === "Novo") return "bg-primary text-primary-foreground"
+  if (badge === "Destaque") return "bg-foreground/90 text-background"
+  return "bg-foreground text-background"
+}
+
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -87,23 +94,27 @@ export function FeaturedProducts() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12"
+          className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-12"
         >
           <div>
-            <span className="text-sm font-medium text-primary tracking-wider uppercase mb-4 block">
+            <span className="text-sm font-medium text-primary tracking-wider uppercase mb-3 block">
               Destaques
             </span>
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-foreground">
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-foreground mb-2">
               Mais Vendidos
             </h2>
+            <p className="text-muted-foreground text-sm">
+              Peças favoritas dos nossos clientes — qualidade comprovada.
+            </p>
           </div>
           <Link href="/catalogo/chinelos-kenner">
             <motion.button
               whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="self-start md:self-auto px-6 py-3 border border-foreground/20 text-foreground font-medium rounded-full hover:bg-foreground/5 transition-colors"
+              whileTap={{ scale: 0.97 }}
+              className="self-start md:self-auto inline-flex items-center gap-2 px-6 py-3 border border-foreground/20 text-foreground text-sm font-medium rounded-full hover:bg-foreground/5 transition-colors group"
             >
               Ver Todos
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
             </motion.button>
           </Link>
         </motion.div>
@@ -118,36 +129,46 @@ export function FeaturedProducts() {
         >
           {products.map((product) => {
             const favorited = isFavorited(product.id)
+            const discount = product.originalPrice
+              ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
+              : 0
+
             return (
               <Link key={product.id} href={`/produto/${product.id}`}>
-                <motion.div variants={itemVariants} className="group cursor-pointer">
-                  {/* Product Image Placeholder */}
-                  <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-secondary mb-4">
+                <motion.div
+                  variants={itemVariants}
+                  whileHover={{ y: -4 }}
+                  transition={{ duration: 0.2 }}
+                  className="group cursor-pointer"
+                >
+                  {/* Product Image Area */}
+                  <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-secondary mb-4 border border-border/20 group-hover:border-border/50 transition-colors">
                     <div className="absolute inset-0 flex items-center justify-center">
                       <span className="text-muted-foreground text-xs">Adicione imagem</span>
                     </div>
 
+                    {/* Gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
                     {/* Badge */}
                     {product.badge && (
-                      <div
-                        className={`absolute top-4 left-4 px-3 py-1.5 rounded-full text-xs font-semibold ${
-                          product.badge === "Desconto"
-                            ? "bg-accent text-accent-foreground"
-                            : product.badge === "Novo"
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-foreground text-background"
-                        }`}
-                      >
+                      <div className={`absolute top-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-semibold tracking-wide ${badgeClasses(product.badge)}`}>
                         {product.badge}
                       </div>
                     )}
 
+                    {/* Discount badge (if no named badge) */}
+                    {!product.badge && discount > 0 && (
+                      <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-primary text-primary-foreground">
+                        -{discount}%
+                      </div>
+                    )}
+
                     {/* Quick Actions */}
-                    <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="absolute top-3 right-3 flex flex-col gap-2 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-200">
                       <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.95 }}
-                        className={`w-10 h-10 backdrop-blur-sm rounded-full flex items-center justify-center transition-colors ${
+                        whileTap={{ scale: 0.92 }}
+                        className={`w-9 h-9 backdrop-blur-sm rounded-full flex items-center justify-center transition-colors shadow-sm ${
                           favorited
                             ? "bg-red-50 dark:bg-red-950/40 text-red-500"
                             : "bg-background/90 text-foreground hover:text-primary"
@@ -158,27 +179,24 @@ export function FeaturedProducts() {
                           toggleFavorite(product.id)
                         }}
                       >
-                        <Heart
-                          className={`w-5 h-5 ${favorited ? "fill-red-500" : ""}`}
-                        />
+                        <Heart className={`w-4 h-4 ${favorited ? "fill-red-500" : ""}`} />
                       </motion.button>
                       <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-primary-foreground"
+                        whileTap={{ scale: 0.92 }}
+                        className="w-9 h-9 bg-primary rounded-full flex items-center justify-center text-primary-foreground shadow-sm"
                         aria-label="Ver produto"
                         onClick={(e) => e.preventDefault()}
                       >
-                        <ShoppingBag className="w-5 h-5" />
+                        <ShoppingBag className="w-4 h-4" />
                       </motion.button>
                     </div>
 
-                    {/* Color Options */}
-                    <div className="absolute bottom-4 left-4 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                    {/* Color swatches */}
+                    <div className="absolute bottom-3 left-3 flex gap-1.5 translate-y-1 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-200">
                       {product.colors.map((color, index) => (
                         <span
                           key={index}
-                          className="w-6 h-6 rounded-full border-2 border-background/50"
+                          className="w-5 h-5 rounded-full border-2 border-background/70 shadow-sm"
                           style={{ backgroundColor: color }}
                           aria-label={`Cor ${index + 1}`}
                         />
@@ -187,15 +205,15 @@ export function FeaturedProducts() {
                   </div>
 
                   {/* Product Info */}
-                  <div className="space-y-2">
-                    <span className="text-xs text-muted-foreground uppercase tracking-wider">
+                  <div className="space-y-1.5 px-0.5">
+                    <span className="text-[10px] text-muted-foreground uppercase tracking-widest">
                       {product.category}
                     </span>
-                    <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                    <h3 className="text-base font-semibold text-foreground group-hover:text-primary transition-colors leading-snug">
                       {product.name}
                     </h3>
                     <div className="flex items-center gap-2">
-                      <span className="text-lg font-bold text-foreground">
+                      <span className="text-base font-bold text-foreground">
                         R$ {product.price.toFixed(2).replace(".", ",")}
                       </span>
                       {product.originalPrice && (

@@ -25,6 +25,7 @@ export const storeProducts: Record<string, StoreProduct> = {
     name: "Chinelo Kenner Kivah NK5",
     price: 189.9,
     originalPrice: 229.9,
+    badge: "Mais Vendido",
     category: "Chinelos Kenner",
     description:
       "O clássico Kenner Kivah NK5 com palmilha anatômica e design moderno. Conforto para o dia todo.",
@@ -75,6 +76,7 @@ export const storeProducts: Record<string, StoreProduct> = {
     id: "kenner-nk6-offwhite-azul-royal",
     name: "Kenner NK6 Off-White / Azul Royal",
     price: 189.9,
+    badge: "Novo",
     category: "Chinelos Kenner",
     image: "/products/kenner/kenner-nk6-offwhite-azul-royal/frontal.png",
     images: [
@@ -98,6 +100,7 @@ export const storeProducts: Record<string, StoreProduct> = {
     id: "kenner-nk6-preto-grafite",
     name: "Kenner NK6 Preto / Grafite",
     price: 189.9,
+    badge: "Mais Vendido",
     category: "Chinelos Kenner",
     image: "/products/kenner/kenner-nk6-preto-grafite/principal.png",
     images: [
@@ -314,6 +317,7 @@ export const storeProducts: Record<string, StoreProduct> = {
     id: "brasil-1",
     name: "Camisa Brasil Oficial Home",
     price: 299.9,
+    badge: "Destaque",
     category: "Seleção Brasileira",
     description:
       "Camisa oficial da Seleção Brasileira modelo Home. Amarelo canarinho com qualidade premium.",
@@ -337,6 +341,7 @@ export const storeProducts: Record<string, StoreProduct> = {
     id: "brasil-4",
     name: "Camisa Brasil Retrô 1970",
     price: 349.9,
+    badge: "Coleção",
     category: "Seleção Brasileira",
     description:
       "Camisa retrô da Seleção Brasileira 1970. O time mais bonito da história do futebol.",
