@@ -61,7 +61,7 @@ export function Header() {
                   alt="Destaque Premium"
                   width={400}
                   height={400}
-                  className="block md:hidden h-9 w-auto dark:invert"
+                  className="block md:hidden h-11 w-auto dark:invert"
                   priority
                 />
                 {/* Desktop: full logo */}
@@ -70,7 +70,7 @@ export function Header() {
                   alt="Destaque Premium"
                   width={860}
                   height={288}
-                  className="hidden md:block h-9 w-auto dark:invert"
+                  className="hidden md:block h-14 w-auto dark:invert"
                   priority
                 />
               </motion.div>

@@ -60,7 +60,7 @@ export function Footer() {
                 alt="Destaque Premium"
                 width={860}
                 height={288}
-                className="h-8 w-auto dark:invert"
+                className="h-10 w-auto dark:invert"
               />
             </Link>
             <p className="text-muted-foreground mb-6 max-w-sm">
