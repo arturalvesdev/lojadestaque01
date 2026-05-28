@@ -59,22 +59,22 @@ export function Header() {
                 whileTap={{ scale: 0.96 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
               >
-                {/* Mobile: DP symbol */}
+                {/* Mobile: DP symbol (cropped) */}
                 <Image
-                  src="/branding/logomarcaDP.png"
+                  src="/branding/logomarcaDP-cropped.png"
                   alt="Destaque Premium"
-                  width={400}
-                  height={400}
-                  className="block md:hidden h-12 w-auto dark:invert"
+                  width={669}
+                  height={520}
+                  className="block md:hidden h-10 w-auto dark:invert"
                   priority
                 />
-                {/* Desktop: full logo */}
+                {/* Desktop: full logo (cropped) */}
                 <Image
-                  src="/branding/logomarcaDestaquecompleta.png"
+                  src="/branding/logomarcaDestaquecompleta-cropped.png"
                   alt="Destaque Premium"
-                  width={860}
-                  height={288}
-                  className="hidden md:block h-16 w-auto dark:invert"
+                  width={1303}
+                  height={403}
+                  className="hidden md:block h-12 w-auto dark:invert"
                   priority
                 />
               </motion.div>

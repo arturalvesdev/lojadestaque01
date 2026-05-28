@@ -14,7 +14,7 @@ export function Hero() {
         {/* DP watermark — very subtle brand presence */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
           <Image
-            src="/branding/logomarcaDP.png"
+            src="/branding/logomarcaDP-cropped.png"
             alt=""
             width={400}
             height={400}

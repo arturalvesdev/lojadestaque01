@@ -61,11 +61,11 @@ export function Footer() {
                 transition={{ duration: 0.3, ease: "easeOut" }}
               >
                 <Image
-                  src="/branding/logomarcaDestaquecompleta.png"
+                  src="/branding/logomarcaDestaquecompleta-cropped.png"
                   alt="Destaque Premium"
-                  width={860}
-                  height={288}
-                  className="h-12 w-auto dark:invert"
+                  width={1303}
+                  height={403}
+                  className="h-10 w-auto dark:invert"
                 />
               </motion.div>
             </Link>
