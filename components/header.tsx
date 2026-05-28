@@ -74,7 +74,7 @@ export function Header() {
                   alt="Destaque Premium"
                   width={1303}
                   height={403}
-                  className="hidden md:block h-12 w-auto dark:invert"
+                  className="hidden md:block h-14 w-auto dark:invert"
                   priority
                 />
               </motion.div>

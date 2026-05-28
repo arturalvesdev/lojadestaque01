@@ -65,7 +65,7 @@ export function Footer() {
                   alt="Destaque Premium"
                   width={1303}
                   height={403}
-                  className="h-10 w-auto dark:invert"
+                  className="h-12 w-auto dark:invert"
                 />
               </motion.div>
             </Link>
