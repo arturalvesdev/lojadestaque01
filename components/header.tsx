@@ -3,9 +3,10 @@
 import { motion, AnimatePresence } from "framer-motion"
 import { useState } from "react"
 import Link from "next/link"
-import { Menu, X, ShoppingBag, Search, User } from "lucide-react"
+import { Menu, X, ShoppingBag, Search, User, Heart } from "lucide-react"
 import { useCart } from "@/contexts/cart-context"
 import { useAuth } from "@/contexts/auth-context"
+import { useFavorites } from "@/contexts/favorites-context"
 import { ProductSearch } from "@/components/product-search"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 
@@ -21,6 +22,7 @@ export function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const { totalItems, setIsOpen } = useCart()
   const { isAuthenticated } = useAuth()
+  const { favoritesCount, setIsOpen: setFavoritesOpen } = useFavorites()
 
   return (
     <motion.header
@@ -81,6 +83,19 @@ export function Header() {
                 aria-expanded={isSearchOpen}
               >
                 <Search className="w-5 h-5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setFavoritesOpen(true)}
+                className="relative p-2 text-foreground hover:text-primary transition-colors"
+                aria-label="Favoritos"
+              >
+                <Heart className="w-5 h-5" />
+                {favoritesCount > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+                    {favoritesCount}
+                  </span>
+                )}
               </button>
               <ThemeToggle />
               <Link

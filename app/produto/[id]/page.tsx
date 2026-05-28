@@ -1,21 +1,24 @@
 "use client"
 
-/**
- * Página de detalhe do produto — variantes obrigatórias e sacola com login.
- */
-
 import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowLeft, Heart, Play, ShoppingBag, Minus, Plus } from "lucide-react"
+import {
+  ArrowLeft,
+  Heart,
+  Play,
+  ShoppingBag,
+  Minus,
+  Plus,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react"
 import { useState, use } from "react"
 import { toast } from "sonner"
 import { useCart } from "@/contexts/cart-context"
+import { useFavorites } from "@/contexts/favorites-context"
 import { getProductById } from "@/lib/products"
-import {
-  ProductOptions,
-  areOptionsSelected,
-} from "@/components/product/product-options"
+import { ProductOptions, areOptionsSelected } from "@/components/product/product-options"
 import {
   buildProductWhatsAppMessage,
   openWhatsApp,
@@ -41,9 +44,9 @@ export default function ProductPage({
   const { id } = use(params)
   const [quantity, setQuantity] = useState(1)
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
-  const [selectedColor, setSelectedColor] = useState<string | null>(null)
   const [activeIndex, setActiveIndex] = useState(0)
   const { addItem } = useCart()
+  const { isFavorited, toggleFavorite } = useFavorites()
 
   const product = getProductById(id)
 
@@ -60,11 +63,23 @@ export default function ProductPage({
 
   const mediaItems = buildMediaItems(product)
   const activeItem = mediaItems[activeIndex] ?? null
+  const hasMultipleMedia = mediaItems.length > 1
+  const favorited = isFavorited(product.id)
 
-  /** Adiciona à sacola (exige login + tamanho + cor) */
+  // Color is informational — use first color as the cart value
+  const defaultColor =
+    product.variants.colors.map((c) => c.name).join(" / ") ||
+    product.variants.colors[0]?.name ||
+    ""
+
+  const handlePrev = () =>
+    setActiveIndex((i) => (i - 1 + mediaItems.length) % mediaItems.length)
+  const handleNext = () =>
+    setActiveIndex((i) => (i + 1) % mediaItems.length)
+
   const handleAddToCart = () => {
-    if (!areOptionsSelected(selectedSize, selectedColor)) {
-      toast.error("Selecione tamanho e cor antes de adicionar à sacola")
+    if (!areOptionsSelected(selectedSize)) {
+      toast.error("Selecione o tamanho antes de adicionar à sacola")
       return
     }
 
@@ -74,23 +89,31 @@ export default function ProductPage({
         name: product.name,
         price: product.price,
         size: selectedSize!,
-        color: selectedColor!,
+        color: defaultColor,
         category: product.category,
       })
       if (!ok) break
     }
   }
 
-  /** WhatsApp com mensagem personalizada do produto */
   const handleWhatsApp = () => {
     const message = buildProductWhatsAppMessage(product)
-    if (selectedSize && selectedColor) {
+    if (selectedSize) {
       openWhatsApp(
-        `${message}\n\nPreferência: tamanho ${selectedSize}, cor ${selectedColor}.`
+        `${message}\n\nPreferência: tamanho ${selectedSize}, cor ${defaultColor}.`
       )
     } else {
       openWhatsApp(message)
     }
+  }
+
+  const handleFavorite = () => {
+    toggleFavorite(product.id)
+    toast.success(
+      isFavorited(product.id)
+        ? "Removido dos favoritos"
+        : "Adicionado aos favoritos"
+    )
   }
 
   return (
@@ -121,6 +144,7 @@ export default function ProductPage({
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover"
                   priority
+                  unoptimized
                 />
               ) : activeItem?.type === "video" ? (
                 <video
@@ -135,6 +159,45 @@ export default function ProductPage({
                 <div className="w-full h-full flex items-center justify-center">
                   <span className="text-muted-foreground text-sm">Sem imagem</span>
                 </div>
+              )}
+
+              {/* Prev / Next buttons */}
+              {hasMultipleMedia && (
+                <>
+                  <button
+                    type="button"
+                    onClick={handlePrev}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-background/80 backdrop-blur-sm border border-border/50 flex items-center justify-center text-foreground hover:bg-background transition-colors shadow-sm"
+                    aria-label="Mídia anterior"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleNext}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-background/80 backdrop-blur-sm border border-border/50 flex items-center justify-center text-foreground hover:bg-background transition-colors shadow-sm"
+                    aria-label="Próxima mídia"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+
+                  {/* Dot indicator */}
+                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+                    {mediaItems.map((_, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => setActiveIndex(i)}
+                        className={`w-1.5 h-1.5 rounded-full transition-all ${
+                          i === activeIndex
+                            ? "bg-foreground w-4"
+                            : "bg-foreground/40"
+                        }`}
+                        aria-label={`Ir para mídia ${i + 1}`}
+                      />
+                    ))}
+                  </div>
+                </>
               )}
             </div>
 
@@ -161,6 +224,7 @@ export default function ProductPage({
                           fill
                           sizes="64px"
                           className="object-cover"
+                          unoptimized
                         />
                       </div>
                     ) : (
@@ -206,9 +270,7 @@ export default function ProductPage({
             <ProductOptions
               product={product}
               selectedSize={selectedSize}
-              selectedColor={selectedColor}
               onSizeChange={setSelectedSize}
-              onColorChange={setSelectedColor}
             />
 
             <div className="flex items-center gap-4 mb-8">
@@ -245,12 +307,19 @@ export default function ProductPage({
               </motion.button>
               <motion.button
                 type="button"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="px-8 py-4 border border-foreground/20 text-foreground font-semibold rounded-full hover:bg-foreground/5 transition-colors"
-                aria-label="Favoritos"
+                onClick={handleFavorite}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`px-8 py-4 border font-semibold rounded-full transition-colors ${
+                  favorited
+                    ? "border-red-400 bg-red-50 text-red-500 dark:bg-red-950/30 dark:border-red-500"
+                    : "border-foreground/20 text-foreground hover:bg-foreground/5"
+                }`}
+                aria-label={favorited ? "Remover dos favoritos" : "Adicionar aos favoritos"}
               >
-                <Heart className="w-5 h-5" />
+                <Heart
+                  className={`w-5 h-5 ${favorited ? "fill-red-500 text-red-500" : ""}`}
+                />
               </motion.button>
             </div>
 

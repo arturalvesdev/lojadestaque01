@@ -392,6 +392,11 @@ export function getProductById(id: string): StoreProduct | undefined {
   return storeProducts[id]
 }
 
+/** Conta produtos de uma categoria */
+export function getProductCountByCategory(category: string): number {
+  return Object.values(storeProducts).filter((p) => p.category === category).length
+}
+
 /** Gera ID único da linha no carrinho (produto + especificações) */
 export function buildCartLineId(productId: string, size: string, color: string) {
   return `${productId}::${size}::${color}`

@@ -17,6 +17,7 @@ export {
   getProductById,
   searchProducts,
   buildCartLineId,
+  getProductCountByCategory,
 } from "@/lib/products/catalog"
 
 // ─── ASYNC API — DB-backed (para uso futuro quando Supabase estiver pronto) ──

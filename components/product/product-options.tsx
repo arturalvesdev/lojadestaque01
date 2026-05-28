@@ -1,26 +1,17 @@
 "use client"
 
-/**
- * Seletor de especificações do produto (tamanho e cor).
- * Obrigatório antes de adicionar à sacola.
- */
-
 import type { StoreProduct } from "@/lib/types/product"
 
 type ProductOptionsProps = {
   product: StoreProduct
   selectedSize: string | null
-  selectedColor: string | null
   onSizeChange: (size: string) => void
-  onColorChange: (color: string) => void
 }
 
 export function ProductOptions({
   product,
   selectedSize,
-  selectedColor,
   onSizeChange,
-  onColorChange,
 }: ProductOptionsProps) {
   const { sizes, colors } = product.variants
 
@@ -49,42 +40,33 @@ export function ProductOptions({
         </div>
       </div>
 
-      {/* Cor */}
-      <div>
-        <p className="text-sm font-medium text-foreground mb-3">
-          Cor <span className="text-destructive">*</span>
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {colors.map((color) => (
-            <button
-              key={color.name}
-              type="button"
-              onClick={() => onColorChange(color.name)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium transition-colors ${
-                selectedColor === color.name
-                  ? "border-primary bg-primary/10 text-foreground"
-                  : "border-border text-muted-foreground hover:border-primary"
-              }`}
-            >
-              {color.hex && (
-                <span
-                  className="w-4 h-4 rounded-full border border-border"
-                  style={{ backgroundColor: color.hex }}
-                />
-              )}
-              {color.name}
-            </button>
-          ))}
+      {/* Cor — informativo apenas, sem seleção */}
+      {colors.length > 0 && (
+        <div>
+          <p className="text-sm font-medium text-foreground mb-3">Cor</p>
+          <div className="flex flex-wrap gap-2">
+            {colors.map((color) => (
+              <div
+                key={color.name}
+                className="flex items-center gap-2 px-4 py-2 rounded-full border border-border/60 bg-muted/30 text-sm text-muted-foreground select-none"
+              >
+                {color.hex && (
+                  <span
+                    className="w-3.5 h-3.5 rounded-full border border-border/40 shrink-0"
+                    style={{ backgroundColor: color.hex }}
+                  />
+                )}
+                {color.name}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }
 
-/** Valida se tamanho e cor foram selecionados */
-export function areOptionsSelected(
-  size: string | null,
-  color: string | null
-): boolean {
-  return Boolean(size?.trim() && color?.trim())
+/** Valida se o tamanho foi selecionado */
+export function areOptionsSelected(size: string | null): boolean {
+  return Boolean(size?.trim())
 }
