@@ -34,13 +34,10 @@ type AuthContextType = {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-const supabaseEnabled =
-  typeof window !== "undefined"
-    ? Boolean(
-        process.env.NEXT_PUBLIC_SUPABASE_URL &&
-          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-      )
-    : isSupabaseConfigured()
+// Use the same strict check on client and server — the bare truthiness check
+// passed placeholder values ("XXXXX.supabase.co", "COLE_SUA_ANON_KEY_AQUI"),
+// causing supabase.auth.signUp() to throw "Invalid path specified in request URL".
+const supabaseEnabled = isSupabaseConfigured()
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null)

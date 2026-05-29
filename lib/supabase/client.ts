@@ -3,15 +3,14 @@
  */
 
 import { createBrowserClient } from "@supabase/ssr"
+import { isSupabaseConfigured } from "@/lib/supabase/config"
 
-/** Cria cliente Supabase no browser — retorna null se variáveis não configuradas */
+/** Cria cliente Supabase no browser — retorna null se credenciais inválidas ou não configuradas */
 export function createClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  if (!isSupabaseConfigured()) return null
 
-  if (!url || !key) {
-    return null
-  }
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL!
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
   return createBrowserClient(url, key)
 }
