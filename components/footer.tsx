@@ -79,10 +79,20 @@ export function Footer() {
               estilo, conforto e autenticidade.
             </p>
 
-            {/* Shipping blurb */}
-            <div className="flex items-start gap-2 mb-5 text-xs text-muted-foreground">
-              <Truck className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-              <span>Envio para todo o Brasil em até 24h úteis após confirmação do pedido.</span>
+            {/* Shipping + coverage */}
+            <div className="flex flex-col gap-2 mb-5">
+              <div className="flex items-start gap-2 text-xs text-muted-foreground">
+                <Truck className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                <span>Envio para todo o Brasil em até 24h úteis após confirmação do pedido.</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4 text-primary flex-shrink-0" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="2" y1="12" x2="22" y2="12" />
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                </svg>
+                <span>Atendimento para todo o Brasil</span>
+              </div>
             </div>
 
             {/* Social Links */}

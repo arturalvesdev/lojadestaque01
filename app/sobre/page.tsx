@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion"
 import Link from "next/link"
-import { Shield, Star, Sparkles, Trophy } from "lucide-react"
+import { ArrowLeft, Shield, Star, Sparkles, Trophy } from "lucide-react"
 
 const values = [
   {
@@ -40,6 +40,31 @@ export default function SobrePage() {
     <main className="min-h-screen bg-background">
       {/* ── Hero ── */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-foreground text-background">
+        {/* Back button */}
+        <div className="absolute top-24 left-0 right-0 z-10 pointer-events-none">
+          <div className="container mx-auto px-4">
+            <motion.div
+              initial={{ opacity: 0, x: -12 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.15 }}
+              className="pointer-events-auto inline-block"
+            >
+              <Link
+                href="/"
+                className="inline-flex items-center gap-1.5 text-sm text-background/60 hover:text-background transition-colors group"
+              >
+                <motion.span
+                  className="inline-flex items-center gap-1.5"
+                  whileHover={{ x: -3 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                  Voltar
+                </motion.span>
+              </Link>
+            </motion.div>
+          </div>
+        </div>
         <div className="absolute inset-0 bg-gradient-to-br from-foreground via-foreground to-foreground/85" />
         <div
           className="absolute inset-0 opacity-[0.035]"
