@@ -6,16 +6,9 @@ import { ArrowLeft } from "lucide-react"
 import { storeProducts } from "@/lib/products/catalog"
 import { ProductCard } from "@/components/product/product-card"
 
-const KENNER_IDS = [
-  "kenner-nk6-offwhite-azul-royal",
-  "kenner-nk6-preto-grafite",
-  "kenner-nk6-vermelho-preto",
-  "kenner-summer-azul-royal-branco",
-  "kenner-summer-branco-preto",
-  "kenner-summer-preto-branco",
-]
-
-const kennerProducts = KENNER_IDS.map((id) => storeProducts[id]).filter(Boolean)
+const kennerProducts = Object.values(storeProducts).filter(
+  (p) => p.category === "Chinelos Kenner"
+)
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -56,7 +49,8 @@ export default function ChinelosKennerPage() {
             Chinelos Kenner
           </h1>
           <p className="text-muted-foreground max-w-xl">
-            NK6 e Summer — dois modelos, um só nível de conforto. Palmilha anatômica, acabamento premium, estilo que fala por si.
+            NK6 e Summer — dois modelos, um só nível de conforto. Palmilha anatômica, acabamento
+            premium, estilo que fala por si.
           </p>
         </motion.div>
 

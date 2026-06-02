@@ -331,10 +331,27 @@ export default function ProductPage({
                 )}
               </div>
               {product.price >= 100 && (
-                <p className="text-xs text-muted-foreground mb-3">
+                <p className="text-xs text-muted-foreground mb-2">
                   ou 3× de R$&nbsp;{(product.price / 3).toFixed(2).replace(".", ",")} sem juros no cartão
                 </p>
               )}
+              {/* Payment methods */}
+              <div className="flex flex-wrap items-center gap-1.5 mt-2">
+                <span className="text-[10px] text-muted-foreground font-medium tracking-wider uppercase mr-0.5">Aceito:</span>
+                {[
+                  { label: "PIX", color: "#32BCAD" },
+                  { label: "Crédito", color: "#555" },
+                  { label: "Débito", color: "#555" },
+                  { label: "Boleto", color: "#555" },
+                ].map(({ label }) => (
+                  <span
+                    key={label}
+                    className="inline-flex items-center h-5 px-2 bg-secondary/80 border border-border/40 rounded text-[10px] font-medium text-muted-foreground"
+                  >
+                    {label}
+                  </span>
+                ))}
+              </div>
             </div>
 
             {/* Shipping confidence — inline micro-strip */}
