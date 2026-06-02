@@ -22,6 +22,7 @@ function product(
 export const storeProducts: Record<string, StoreProduct> = {
   "1": product({
     id: "1",
+    isActive: false,
     name: "Chinelo Kenner Kivah NK5",
     price: 189.9,
     originalPrice: 229.9,
@@ -45,6 +46,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "2": product({
     id: "2",
+    isActive: false,
     name: "Chinelo Kenner Amp Turbo",
     price: 159.9,
     category: "Chinelos Kenner",
@@ -66,6 +68,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "3": product({
     id: "3",
+    isActive: false,
     name: "Boné Lacoste Sport",
     price: 349.9,
     category: "Bonés Lacoste",
@@ -87,6 +90,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "4": product({
     id: "4",
+    isActive: false,
     name: "Camisa Brasil Oficial",
     price: 299.9,
     originalPrice: 349.9,
@@ -109,6 +113,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "5": product({
     id: "5",
+    isActive: false,
     name: "Camisa Flamengo 2024",
     price: 279.9,
     category: "Camisas de Time",
@@ -129,6 +134,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "6": product({
     id: "6",
+    isActive: false,
     name: "Chinelo Kenner Sunset",
     price: 139.9,
     originalPrice: 169.9,
@@ -372,6 +378,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "bone-1": product({
     id: "bone-1",
+    isActive: false,
     name: "Boné Lacoste Sport Preto",
     price: 349.9,
     category: "Bonés Lacoste",
@@ -392,6 +399,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "bone-2": product({
     id: "bone-2",
+    isActive: false,
     name: "Boné Lacoste Sport Branco",
     price: 349.9,
     category: "Bonés Lacoste",
@@ -412,6 +420,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "bone-3": product({
     id: "bone-3",
+    isActive: false,
     name: "Boné Lacoste Dry Fit",
     price: 379.9,
     category: "Bonés Lacoste",
@@ -433,6 +442,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "bone-4": product({
     id: "bone-4",
+    isActive: false,
     name: "Boné Lacoste Classic Navy",
     price: 329.9,
     category: "Bonés Lacoste",
@@ -453,6 +463,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "bone-5": product({
     id: "bone-5",
+    isActive: false,
     name: "Boné Lacoste Verde",
     price: 349.9,
     category: "Bonés Lacoste",
@@ -473,6 +484,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "bone-6": product({
     id: "bone-6",
+    isActive: false,
     name: "Boné Lacoste Vermelho",
     price: 349.9,
     category: "Bonés Lacoste",
@@ -493,6 +505,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "time-1": product({
     id: "time-1",
+    isActive: false,
     name: "Camisa Flamengo 2024",
     price: 279.9,
     category: "Camisas de Time",
@@ -513,6 +526,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "time-2": product({
     id: "time-2",
+    isActive: false,
     name: "Camisa Corinthians 2024",
     price: 279.9,
     category: "Camisas de Time",
@@ -533,6 +547,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "time-3": product({
     id: "time-3",
+    isActive: false,
     name: "Camisa Palmeiras 2024",
     price: 279.9,
     category: "Camisas de Time",
@@ -553,6 +568,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "time-4": product({
     id: "time-4",
+    isActive: false,
     name: "Camisa São Paulo 2024",
     price: 279.9,
     category: "Camisas de Time",
@@ -573,6 +589,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "time-5": product({
     id: "time-5",
+    isActive: false,
     name: "Camisa Santos 2024",
     price: 269.9,
     category: "Camisas de Time",
@@ -593,6 +610,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "time-6": product({
     id: "time-6",
+    isActive: false,
     name: "Camisa Vasco 2024",
     price: 269.9,
     category: "Camisas de Time",
@@ -613,6 +631,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "time-7": product({
     id: "time-7",
+    isActive: false,
     name: "Camisa Grêmio 2024",
     price: 279.9,
     category: "Camisas de Time",
@@ -633,6 +652,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "time-8": product({
     id: "time-8",
+    isActive: false,
     name: "Camisa Internacional 2024",
     price: 279.9,
     category: "Camisas de Time",
@@ -653,6 +673,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "brasil-1": product({
     id: "brasil-1",
+    isActive: false,
     name: "Camisa Brasil Oficial Home",
     price: 299.9,
     badge: "Destaque",
@@ -675,6 +696,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "brasil-2": product({
     id: "brasil-2",
+    isActive: false,
     name: "Camisa Brasil Oficial Away",
     price: 299.9,
     category: "Seleção Brasileira",
@@ -696,6 +718,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "brasil-3": product({
     id: "brasil-3",
+    isActive: false,
     name: "Camisa Brasil Treino",
     price: 249.9,
     category: "Seleção Brasileira",
@@ -716,6 +739,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "brasil-4": product({
     id: "brasil-4",
+    isActive: false,
     name: "Camisa Brasil Retrô 1970",
     price: 349.9,
     badge: "Coleção",
@@ -738,6 +762,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "brasil-5": product({
     id: "brasil-5",
+    isActive: false,
     name: "Camisa Brasil Retrô 1994",
     price: 349.9,
     category: "Seleção Brasileira",
@@ -758,6 +783,7 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
   "brasil-6": product({
     id: "brasil-6",
+    isActive: false,
     name: "Camisa Brasil Retrô 2002",
     price: 349.9,
     category: "Seleção Brasileira",
@@ -816,8 +842,8 @@ export const storeProducts: Record<string, StoreProduct> = {
   }),
 }
 
-/** Lista única de produtos (sem duplicar nomes na busca) */
-const catalogList = Object.values(storeProducts)
+/** Lista de produtos ativos (sem duplicar nomes na busca) */
+const catalogList = Object.values(storeProducts).filter((p) => p.isActive !== false)
 
 function normalizeText(value: string) {
   return value
@@ -850,9 +876,11 @@ export function getProductById(id: string): StoreProduct | undefined {
   return storeProducts[id]
 }
 
-/** Conta produtos de uma categoria */
+/** Conta produtos ativos de uma categoria */
 export function getProductCountByCategory(category: string): number {
-  return Object.values(storeProducts).filter((p) => p.category === category).length
+  return Object.values(storeProducts).filter(
+    (p) => p.category === category && p.isActive !== false
+  ).length
 }
 
 /** Gera ID único da linha no carrinho (produto + especificações) */

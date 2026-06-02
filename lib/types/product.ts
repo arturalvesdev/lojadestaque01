@@ -41,4 +41,6 @@ export type StoreProduct = {
   images?: string[]
   /** URL do vídeo do produto (relativa a /public) */
   video?: string
+  /** false = produto inativo/placeholder, oculto no catálogo público */
+  isActive?: boolean
 }

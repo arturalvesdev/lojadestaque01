@@ -7,7 +7,7 @@ import { storeProducts } from "@/lib/products/catalog"
 import { ProductCard } from "@/components/product/product-card"
 
 const bonesProducts = Object.values(storeProducts).filter(
-  (p) => p.category === "Bonés Lacoste"
+  (p) => p.category === "Bonés Lacoste" && p.isActive !== false
 )
 
 const containerVariants = {

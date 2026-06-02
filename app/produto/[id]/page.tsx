@@ -82,11 +82,14 @@ export default function ProductPage({
 
   const product = getProductById(id)
 
-  if (!product) {
+  if (!product || product.isActive === false) {
     return (
       <main className="min-h-screen bg-background pt-24 px-4 text-center">
-        <p className="text-muted-foreground">Produto não encontrado.</p>
-        <Link href="/" className="text-primary mt-4 inline-block hover:underline">
+        <p className="text-muted-foreground text-lg font-medium">Produto indisponível.</p>
+        <p className="text-muted-foreground text-sm mt-2">
+          Este produto não está disponível no momento.
+        </p>
+        <Link href="/" className="text-primary mt-6 inline-block hover:underline">
           Voltar à loja
         </Link>
       </main>
