@@ -777,6 +777,43 @@ export const storeProducts: Record<string, StoreProduct> = {
       uso: "Coleção / Casual",
     },
   }),
+  // ─── Camisa Seleção Amarela Jogador ──────────────────────────────────────────
+  "camisa-selecao-amarela-jogador": product({
+    id: "camisa-selecao-amarela-jogador",
+    name: "Camisa Seleção Brasileira Amarela Jogador",
+    price: 299.9,
+    badge: "Novo",
+    category: "Seleção Brasileira",
+    image: "/products/selecao-brasileira/camisa-selecao-amarela-jogador/principal.jpeg",
+    images: [
+      "/products/selecao-brasileira/camisa-selecao-amarela-jogador/principal.jpeg",
+      "/products/selecao-brasileira/camisa-selecao-amarela-jogador/escudo.jpeg",
+      "/products/selecao-brasileira/camisa-selecao-amarela-jogador/aerofit.jpeg",
+      "/products/selecao-brasileira/camisa-selecao-amarela-jogador/patrocinio.jpeg",
+    ],
+    description:
+      "A camisa amarela da Seleção Brasileira no estilo jogador — o visual clássico que representa décadas de história e o orgulho de um país inteiro. Feita para quem quer torcer com identidade ou incorporar o estilo esportivo brasileiro no dia a dia.",
+    highlights: [
+      "Visual clássico da Seleção Brasileira — amarelo canarinho inconfundível",
+      "Modelagem estilo jogador para um caimento mais próximo do corpo",
+      "Ideal para torcer e usar no dia a dia com estilo",
+      "Acabamento selecionado com atenção aos detalhes",
+      "Peça versátil para composições casuais e esportivas",
+    ],
+    specifications: {
+      marca: "Seleção Brasileira",
+      modelo: "Amarela Jogador",
+      categoria: "Camisa de Seleção",
+      uso: "Casual / Torcida",
+    },
+    variants: {
+      sizes: ["P", "M", "G", "GG", "XG"],
+      colors: [
+        { name: "Amarelo", hex: "#FFD700" },
+        { name: "Verde", hex: "#009C3B" },
+      ],
+    },
+  }),
 }
 
 /** Lista única de produtos (sem duplicar nomes na busca) */
