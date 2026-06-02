@@ -20,6 +20,7 @@ import { useCart } from "@/contexts/cart-context"
 import { useFavorites } from "@/contexts/favorites-context"
 import { getProductById } from "@/lib/products"
 import { ProductOptions, areOptionsSelected } from "@/components/product/product-options"
+import { ProductInfoTabs } from "@/components/product/product-info-tabs"
 import { TrustStrip } from "@/components/trust-section"
 import {
   buildProductWhatsAppMessage,
@@ -446,6 +447,9 @@ export default function ProductPage({
             </motion.button>
           </motion.div>
         </div>
+
+        {/* ── Product Info Tabs ── */}
+        <ProductInfoTabs product={product} />
       </div>
 
       {/* ── Zoom Lightbox ── */}

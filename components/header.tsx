@@ -13,9 +13,10 @@ import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 const navLinks = [
   { name: "Início", href: "/" },
-  { name: "Catálogo", href: "#collection" },
-  { name: "Novidades", href: "#new" },
-  { name: "Contato", href: "#whatsapp-cta" },
+  { name: "Catálogo", href: "/#collection" },
+  { name: "Novidades", href: "/#new" },
+  { name: "Sobre", href: "/sobre" },
+  { name: "Contato", href: "/#whatsapp-cta" },
 ]
 
 export function Header() {

@@ -15,6 +15,14 @@ export type ProductVariants = {
   colors: ProductColor[]
 }
 
+/** Especificações técnicas do produto */
+export type ProductSpecifications = {
+  marca?: string
+  modelo?: string
+  categoria?: string
+  uso?: string
+}
+
 /** Produto completo exibido na loja */
 export type StoreProduct = {
   id: string
@@ -23,6 +31,8 @@ export type StoreProduct = {
   originalPrice?: number
   category: string
   description: string
+  highlights?: string[]
+  specifications?: ProductSpecifications
   variants: ProductVariants
   badge?: string
   /** URL da imagem principal (relativa a /public) */
