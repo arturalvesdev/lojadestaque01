@@ -39,7 +39,7 @@ const storeAddress = {
 }
 
 const socialLinks = [
-  { name: "Instagram", icon: InstagramIcon, href: "https://www.instagram.com/destaquedosurf_/" },
+  { name: "Instagram", icon: InstagramIcon, href: "https://www.instagram.com/oficial_destaque?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" },
   {
     name: "WhatsApp",
     icon: ({ className }: { className?: string }) => (

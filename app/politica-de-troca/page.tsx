@@ -107,8 +107,7 @@ export default function PoliticaDeTrocaPage() {
             </h2>
             <p className="text-muted-foreground leading-relaxed">
               Em caso de defeito de fabricação, fazemos a troca ou reembolso
-              integral sem custo algum para você. O frete de devolução fica por
-              nossa conta.
+              integral sem custo algum para você.
             </p>
           </section>
 

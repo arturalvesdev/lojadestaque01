@@ -95,7 +95,7 @@ export function InstagramFeed() {
           className="text-center mt-10"
         >
           <motion.a
-            href="https://www.instagram.com/destaquedosurf_/"
+            href="https://www.instagram.com/oficial_destaque?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.02 }}

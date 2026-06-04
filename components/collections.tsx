@@ -44,7 +44,7 @@ const collections = [
     category: "Seleção Brasileira",
     description: "Orgulho nacional",
     href: "/catalogo/selecao-brasileira",
-    image: null,
+    image: "/products/selecao-brasileira/camisa-selecao-amarela-jogador/principal.jpeg",
     gradient: "bg-gradient-to-br from-secondary via-yellow-950/25 to-card",
   },
 ]
