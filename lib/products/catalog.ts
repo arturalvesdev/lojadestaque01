@@ -503,6 +503,57 @@ export const storeProducts: Record<string, StoreProduct> = {
       uso: "Casual / Esporte",
     },
   }),
+  // ─── Boné Nike Club ──────────────────────────────────────────────────────────
+  "bone-nike-club": product({
+    id: "bone-nike-club",
+    name: "Boné Nike Club",
+    price: 180,
+    badge: "Novo",
+    category: "Bonés Lacoste",
+    image: "/products/bones/bone-nike-club/branco/principal.avif",
+    images: [
+      "/products/bones/bone-nike-club/branco/principal.avif",
+      "/products/bones/bone-nike-club/branco/costas.avif",
+    ],
+    colorImages: {
+      "Branco": [
+        "/products/bones/bone-nike-club/branco/principal.avif",
+        "/products/bones/bone-nike-club/branco/costas.avif",
+      ],
+      "Cinza": [
+        "/products/bones/bone-nike-club/cinza/principal.avif",
+        "/products/bones/bone-nike-club/cinza/costas.avif",
+      ],
+      "Preto": [
+        "/products/bones/bone-nike-club/preto/principal.avif",
+        "/products/bones/bone-nike-club/preto/costas.avif",
+      ],
+    },
+    description:
+      "O Boné Nike Club combina estilo, versatilidade e conforto em uma peça essencial para o dia a dia. Seu visual minimalista e atemporal permite composições casuais e esportivas, tornando-se uma escolha prática para diferentes ocasiões. Ideal para quem busca um acessório versátil, com identidade marcante e acabamento cuidadosamente selecionado.",
+    highlights: [
+      "Visual clássico e versátil",
+      "Modelo Nike Club",
+      "Ajuste confortável",
+      "Ideal para uso diário",
+      "Combina com diferentes estilos",
+      "Acabamento selecionado",
+    ],
+    specifications: {
+      marca: "Nike Club",
+      modelo: "Club",
+      categoria: "Boné",
+      uso: "Casual",
+    },
+    variants: {
+      sizes: ["Único"],
+      colors: [
+        { name: "Branco", hex: "#F5F5F5" },
+        { name: "Cinza", hex: "#9CA3AF" },
+        { name: "Preto", hex: "#1a1a1a" },
+      ],
+    },
+  }),
   "time-1": product({
     id: "time-1",
     isActive: false,
