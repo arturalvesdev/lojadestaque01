@@ -30,8 +30,9 @@ import type { StoreProduct } from "@/lib/types/product"
 
 type MediaItem = { type: "image" | "video"; src: string }
 
-function buildMediaItems(product: StoreProduct): MediaItem[] {
-  const images = product.images ?? (product.image ? [product.image] : [])
+function buildMediaItems(product: StoreProduct, selectedColor?: string): MediaItem[] {
+  const colorImages = selectedColor ? product.colorImages?.[selectedColor] : undefined
+  const images = colorImages ?? product.images ?? (product.image ? [product.image] : [])
   const items: MediaItem[] = images.map((src) => ({ type: "image", src }))
   if (product.video) {
     items.push({ type: "video", src: product.video })
@@ -59,6 +60,7 @@ export default function ProductPage({
   const { id } = use(params)
   const [quantity, setQuantity] = useState(1)
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
+  const [selectedColor, setSelectedColor] = useState<string>("")
   const [activeIndex, setActiveIndex] = useState(0)
   const [zoomOpen, setZoomOpen] = useState(false)
   const [showStickyBar, setShowStickyBar] = useState(false)
@@ -96,7 +98,23 @@ export default function ProductPage({
     )
   }
 
-  const mediaItems = buildMediaItems(product)
+  // Auto-select single size and initialize selected color
+  useEffect(() => {
+    if (product.variants.sizes.length === 1) {
+      setSelectedSize(product.variants.sizes[0])
+    }
+    if (product.variants.colors.length > 0 && !selectedColor) {
+      setSelectedColor(product.variants.colors[0].name)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product.id])
+
+  const handleColorChange = (color: string) => {
+    setSelectedColor(color)
+    setActiveIndex(0)
+  }
+
+  const mediaItems = buildMediaItems(product, selectedColor)
   const activeItem = mediaItems[activeIndex] ?? null
   const hasMultipleMedia = mediaItems.length > 1
   const favorited = isFavorited(product.id)
@@ -104,8 +122,9 @@ export default function ProductPage({
     ? calcDiscount(product.originalPrice, product.price)
     : 0
 
-  // Color is informational — use first color as the cart value
-  const defaultColor =
+  // Active color for cart — prefer selectedColor, fallback to all colors joined
+  const cartColor =
+    selectedColor ||
     product.variants.colors.map((c) => c.name).join(" / ") ||
     product.variants.colors[0]?.name ||
     ""
@@ -127,7 +146,7 @@ export default function ProductPage({
         name: product.name,
         price: product.price,
         size: selectedSize!,
-        color: defaultColor,
+        color: cartColor,
         category: product.category,
       })
       if (!ok) break
@@ -138,7 +157,7 @@ export default function ProductPage({
     const message = buildProductWhatsAppMessage(product)
     if (selectedSize) {
       openWhatsApp(
-        `${message}\n\nPreferência: tamanho ${selectedSize}, cor ${defaultColor}.`
+        `${message}\n\nPreferência: tamanho ${selectedSize}, cor ${cartColor}.`
       )
     } else {
       openWhatsApp(message)
@@ -393,6 +412,8 @@ export default function ProductPage({
               product={product}
               selectedSize={selectedSize}
               onSizeChange={setSelectedSize}
+              selectedColor={selectedColor}
+              onColorChange={product.colorImages ? handleColorChange : undefined}
             />
 
             {/* Quantity + Add to cart */}

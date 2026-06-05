@@ -43,4 +43,6 @@ export type StoreProduct = {
   video?: string
   /** false = produto inativo/placeholder, oculto no catálogo público */
   isActive?: boolean
+  /** Imagens por cor — chave = nome da cor, valor = lista de URLs */
+  colorImages?: Record<string, string[]>
 }
