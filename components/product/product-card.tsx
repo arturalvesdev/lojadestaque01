@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
@@ -39,11 +40,9 @@ function NoImageFallback({ category, name }: { category: string; name: string })
 
   return (
     <div className={`absolute inset-0 ${meta.gradient} overflow-hidden`}>
-      {/* Watermark letter */}
       <span className="absolute inset-0 flex items-center justify-center font-black text-[100px] leading-none tracking-tighter select-none text-foreground/[0.05] pointer-events-none">
         {meta.abbr}
       </span>
-      {/* Product name as fallback content */}
       <div className="absolute bottom-4 left-4 right-4">
         <p className="text-xs font-medium text-muted-foreground/60 line-clamp-2 leading-snug">
           {name}
@@ -70,6 +69,17 @@ export function ProductCard({
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 0
 
+  // Color variation state — only active for products with colorImages
+  const colorEntries = product.colorImages ? Object.entries(product.colorImages) : []
+  const hasColorVariants = colorEntries.length > 0
+  const [activeColor, setActiveColor] = useState<string>(colorEntries[0]?.[0] ?? "")
+
+  // Resolve the active thumbnail
+  const activeThumbnail =
+    (hasColorVariants && activeColor && product.colorImages![activeColor]?.[0])
+      ? product.colorImages![activeColor][0]
+      : product.image
+
   return (
     <Link href={`/produto/${product.id}`}>
       <motion.div
@@ -81,9 +91,26 @@ export function ProductCard({
         <div
           className={`relative ${aspectRatio === "portrait" ? "aspect-[3/4]" : "aspect-square"} rounded-2xl overflow-hidden bg-secondary mb-3.5 border border-border/20 group-hover:border-border/50 transition-colors duration-200`}
         >
-          {product.image ? (
+          {hasColorVariants ? (
+            /* Stacked images — one per color, toggled by opacity for smooth transition */
+            colorEntries.map(([color, imgs]) => (
+              <Image
+                key={color}
+                src={imgs[0]}
+                alt={`${product.name} — ${color}`}
+                fill
+                sizes={sizes}
+                className={`object-cover transition-all duration-300 ${
+                  activeColor === color
+                    ? "opacity-100 group-hover:scale-105"
+                    : "opacity-0"
+                }`}
+                unoptimized
+              />
+            ))
+          ) : activeThumbnail ? (
             <Image
-              src={product.image}
+              src={activeThumbnail}
               alt={product.name}
               fill
               sizes={sizes}
@@ -157,6 +184,49 @@ export function ProductCard({
               </span>
             )}
           </div>
+
+          {/* Color swatches — only for products with colorImages */}
+          {hasColorVariants && (
+            <div
+              className="flex items-center gap-2.5 pt-2"
+              onClick={(e) => e.preventDefault()}
+            >
+              {/* Swatch row */}
+              <div className="flex items-center gap-1.5">
+                {colorEntries.map(([color]) => {
+                  const colorData = product.variants.colors.find((c) => c.name === color)
+                  const isActive = activeColor === color
+                  return (
+                    <motion.button
+                      key={color}
+                      type="button"
+                      whileHover={{ scale: 1.2 }}
+                      whileTap={{ scale: 0.9 }}
+                      onMouseEnter={() => setActiveColor(color)}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        setActiveColor(color)
+                      }}
+                      aria-label={`Selecionar cor ${color}`}
+                      aria-pressed={isActive}
+                      className={`w-3.5 h-3.5 rounded-full border-2 transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 ${
+                        isActive
+                          ? "ring-2 ring-primary ring-offset-1 border-transparent scale-110"
+                          : "border-border/50 hover:border-border/80"
+                      }`}
+                      style={{ backgroundColor: colorData?.hex ?? "#888888" }}
+                    />
+                  )
+                })}
+              </div>
+
+              {/* Active color label */}
+              <span className="text-[10px] text-muted-foreground leading-none">
+                {activeColor}
+              </span>
+            </div>
+          )}
         </div>
       </motion.div>
     </Link>
