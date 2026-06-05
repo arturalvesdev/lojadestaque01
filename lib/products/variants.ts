@@ -32,7 +32,7 @@ export function getDefaultVariantsByCategory(category: string): ProductVariants 
     }
   }
 
-  if (lower.includes("boné") || lower.includes("bone") || lower.includes("lacoste")) {
+  if (lower.includes("boné") || lower.includes("bone")) {
     return {
       sizes: CAP_SIZES,
       colors: [

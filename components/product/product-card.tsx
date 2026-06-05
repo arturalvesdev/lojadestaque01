@@ -20,8 +20,8 @@ const categoryMeta: Record<string, { abbr: string; gradient: string }> = {
     abbr: "NK",
     gradient: "bg-gradient-to-br from-secondary via-muted/50 to-card",
   },
-  "Bonés Lacoste": {
-    abbr: "BL",
+  "Bonés": {
+    abbr: "BN",
     gradient: "bg-gradient-to-br from-secondary via-emerald-950/25 to-card",
   },
   "Camisas de Time": {

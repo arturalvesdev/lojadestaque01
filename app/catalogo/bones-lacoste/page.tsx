@@ -7,7 +7,7 @@ import { storeProducts } from "@/lib/products/catalog"
 import { ProductCard } from "@/components/product/product-card"
 
 const bonesProducts = Object.values(storeProducts).filter(
-  (p) => p.category === "Bonés Lacoste" && p.isActive !== false
+  (p) => p.category === "Bonés" && p.isActive !== false
 )
 
 const containerVariants = {
@@ -46,10 +46,10 @@ export default function BonesLacostePage() {
             Coleção
           </span>
           <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-foreground mb-3">
-            Bonés Lacoste
+            Bonés
           </h1>
           <p className="text-muted-foreground max-w-xl">
-            Elegância que não pede licença. Bonés Lacoste originais — tecido respirável, logo bordado, ajuste perfeito para quem entende de estilo.
+            Modelos selecionados com acabamento e estilo. De Lacoste a Nike — bonés para quem entende de detalhe.
           </p>
         </motion.div>
 

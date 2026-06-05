@@ -71,7 +71,7 @@ export const storeProducts: Record<string, StoreProduct> = {
     isActive: false,
     name: "Boné Lacoste Sport",
     price: 349.9,
-    category: "Bonés Lacoste",
+    category: "Bonés",
     description:
       "Boné Lacoste Sport original com ajuste perfeito e tecido respirável. Elegância e esporte em um só produto.",
     highlights: [
@@ -381,7 +381,7 @@ export const storeProducts: Record<string, StoreProduct> = {
     isActive: false,
     name: "Boné Lacoste Sport Preto",
     price: 349.9,
-    category: "Bonés Lacoste",
+    category: "Bonés",
     description: "Boné Lacoste Sport na cor preta clássica. Elegância e esporte em um só produto.",
     highlights: [
       "Logo Lacoste bordado com precisão na frente",
@@ -402,7 +402,7 @@ export const storeProducts: Record<string, StoreProduct> = {
     isActive: false,
     name: "Boné Lacoste Sport Branco",
     price: 349.9,
-    category: "Bonés Lacoste",
+    category: "Bonés",
     description: "Boné Lacoste Sport branco com logo bordado. Perfeito para dias ensolarados.",
     highlights: [
       "Logo Lacoste bordado em destaque no branco imaculado",
@@ -423,7 +423,7 @@ export const storeProducts: Record<string, StoreProduct> = {
     isActive: false,
     name: "Boné Lacoste Dry Fit",
     price: 379.9,
-    category: "Bonés Lacoste",
+    category: "Bonés",
     description:
       "Boné Lacoste com tecnologia Dry Fit. Mantém você fresco durante atividades físicas.",
     highlights: [
@@ -445,7 +445,7 @@ export const storeProducts: Record<string, StoreProduct> = {
     isActive: false,
     name: "Boné Lacoste Classic Navy",
     price: 329.9,
-    category: "Bonés Lacoste",
+    category: "Bonés",
     description: "Boné Lacoste Classic na cor navy. Estilo atemporal com qualidade premium.",
     highlights: [
       "Cor navy atemporal que combina com qualquer estilo",
@@ -466,7 +466,7 @@ export const storeProducts: Record<string, StoreProduct> = {
     isActive: false,
     name: "Boné Lacoste Verde",
     price: 349.9,
-    category: "Bonés Lacoste",
+    category: "Bonés",
     description: "Boné Lacoste Sport verde. Cor vibrante com o estilo clássico da marca.",
     highlights: [
       "Verde vibrante para quem gosta de se destacar",
@@ -487,7 +487,7 @@ export const storeProducts: Record<string, StoreProduct> = {
     isActive: false,
     name: "Boné Lacoste Vermelho",
     price: 349.9,
-    category: "Bonés Lacoste",
+    category: "Bonés",
     description: "Boné Lacoste Sport vermelho. Destaque-se com estilo e qualidade.",
     highlights: [
       "Vermelho intenso para um visual marcante e confiante",
@@ -509,7 +509,7 @@ export const storeProducts: Record<string, StoreProduct> = {
     name: "Boné Nike Club",
     price: 180,
     badge: "Novo",
-    category: "Bonés Lacoste",
+    category: "Bonés",
     image: "/products/bones/bone-nike-club/branco/principal.avif",
     images: [
       "/products/bones/bone-nike-club/branco/principal.avif",
@@ -540,9 +540,9 @@ export const storeProducts: Record<string, StoreProduct> = {
       "Acabamento selecionado",
     ],
     specifications: {
-      marca: "Nike Club",
+      marca: "Nike",
       modelo: "Club",
-      categoria: "Boné",
+      categoria: "Bonés",
       uso: "Casual",
     },
     variants: {
