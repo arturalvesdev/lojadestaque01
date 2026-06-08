@@ -37,7 +37,6 @@ const categoryMeta: Record<string, { abbr: string; gradient: string }> = {
 
 function NoImageFallback({ category, name }: { category: string; name: string }) {
   const meta = categoryMeta[category] ?? { abbr: category.slice(0, 2).toUpperCase(), gradient: "bg-secondary" }
-
   return (
     <div className={`absolute inset-0 ${meta.gradient} overflow-hidden`}>
       <span className="absolute inset-0 flex items-center justify-center font-black text-[100px] leading-none tracking-tighter select-none text-foreground/[0.05] pointer-events-none">
@@ -50,6 +49,16 @@ function NoImageFallback({ category, name }: { category: string; name: string })
       </div>
     </div>
   )
+}
+
+/**
+ * Resolves the best hover image from an ordered image list.
+ * Priority: perspectiva (any index after 0) → second image → null.
+ */
+function resolveHoverImg(imgs: string[]): string | null {
+  if (imgs.length < 2) return null
+  const perspImg = imgs.slice(1).find((src) => src.includes("perspectiva"))
+  return perspImg ?? imgs[1]
 }
 
 type ProductCardProps = {
@@ -69,22 +78,18 @@ export function ProductCard({
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 0
 
-  // Color variation state — only active for products with colorImages
   const colorEntries = product.colorImages ? Object.entries(product.colorImages) : []
   const hasColorVariants = colorEntries.length > 0
   const [activeColor, setActiveColor] = useState<string>(colorEntries[0]?.[0] ?? "")
 
-  // Resolve the active thumbnail
-  const activeThumbnail =
-    (hasColorVariants && activeColor && product.colorImages![activeColor]?.[0])
-      ? product.colorImages![activeColor][0]
-      : product.image
+  // Main image: color principal → product.image → first from images[]
+  const mainImage = product.image ?? product.images?.[0] ?? null
 
-  // Perspectiva hover image for non-color-variant products
-  const hoverImage =
-    !hasColorVariants && product.images?.[1]?.includes("perspectiva")
-      ? product.images[1]
-      : null
+  // Hover image for products without colorImages:
+  // perspectiva anywhere in images[] → images[1] → null
+  const hoverImage = !hasColorVariants
+    ? resolveHoverImg(product.images ?? (mainImage ? [mainImage] : []))
+    : null
 
   return (
     <Link href={`/produto/${product.id}`}>
@@ -93,15 +98,21 @@ export function ProductCard({
         transition={{ duration: 0.2 }}
         className="group cursor-pointer"
       >
-        {/* Image area */}
+        {/* ── Image area ── */}
         <div
-          className={`relative ${aspectRatio === "portrait" ? "aspect-[3/4]" : "aspect-square"} rounded-2xl overflow-hidden bg-secondary mb-3.5 border border-border/20 group-hover:border-border/50 transition-colors duration-200`}
+          className={`relative ${
+            aspectRatio === "portrait" ? "aspect-[3/4]" : "aspect-square"
+          } rounded-2xl overflow-hidden bg-secondary mb-3.5 border border-border/20 group-hover:border-border/50 transition-colors duration-200`}
         >
           {hasColorVariants ? (
-            /* Stacked layers per color: principal always rendered, perspectiva fades in on hover */
+            /*
+             * Stacked layers — one principal + one hover image per color.
+             * Opacity toggled by activeColor state; hover fades in perspectiva/second image.
+             * All images are pre-rendered so color switching is instant (no flicker).
+             */
             <>
               {colorEntries.map(([color, imgs]) => {
-                const hasPerspectiva = !!imgs[1]?.includes("perspectiva")
+                const hImg = resolveHoverImg(imgs)
                 return (
                   <Image
                     key={`p-${color}`}
@@ -111,7 +122,7 @@ export function ProductCard({
                     sizes={sizes}
                     className={`object-cover transition-all duration-300 ${
                       activeColor === color
-                        ? hasPerspectiva
+                        ? hImg
                           ? "opacity-100 group-hover:opacity-0"
                           : "opacity-100 group-hover:scale-105"
                         : "opacity-0"
@@ -120,11 +131,13 @@ export function ProductCard({
                   />
                 )
               })}
-              {colorEntries.map(([color, imgs]) =>
-                imgs[1]?.includes("perspectiva") ? (
+              {colorEntries.map(([color, imgs]) => {
+                const hImg = resolveHoverImg(imgs)
+                if (!hImg) return null
+                return (
                   <Image
-                    key={`pv-${color}`}
-                    src={imgs[1]}
+                    key={`h-${color}`}
+                    src={hImg}
                     alt={`${product.name} — ${color}`}
                     fill
                     sizes={sizes}
@@ -135,13 +148,17 @@ export function ProductCard({
                     }`}
                     unoptimized
                   />
-                ) : null
-              )}
+                )
+              })}
             </>
-          ) : activeThumbnail ? (
+          ) : mainImage ? (
+            /*
+             * Single-image or images[] products.
+             * Cross-fade to hover image when available; scale-only when not.
+             */
             <>
               <Image
-                src={activeThumbnail}
+                src={mainImage}
                 alt={product.name}
                 fill
                 sizes={sizes}
@@ -165,12 +182,14 @@ export function ProductCard({
             <NoImageFallback category={product.category} name={product.name} />
           )}
 
-          {/* Hover gradient */}
+          {/* Hover gradient overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
-          {/* Badge — named badge or discount, not both */}
+          {/* Badge */}
           {product.badge && discount === 0 && (
-            <div className={`absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[11px] font-semibold tracking-wide pointer-events-none ${badgeClasses(product.badge)}`}>
+            <div
+              className={`absolute top-3 left-3 px-2.5 py-0.5 rounded-full text-[11px] font-semibold tracking-wide pointer-events-none ${badgeClasses(product.badge)}`}
+            >
               {product.badge}
             </div>
           )}
@@ -180,7 +199,7 @@ export function ProductCard({
             </div>
           )}
 
-          {/* Quick actions — slide in on hover */}
+          {/* Quick actions */}
           <div className="absolute top-3 right-3 flex flex-col gap-2 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-200">
             <motion.button
               type="button"
@@ -210,7 +229,7 @@ export function ProductCard({
           </div>
         </div>
 
-        {/* Product info */}
+        {/* ── Product info ── */}
         <div className="space-y-1 px-0.5">
           <span className="text-[10px] text-muted-foreground uppercase tracking-widest block">
             {product.category}
@@ -235,7 +254,6 @@ export function ProductCard({
               className="flex items-center gap-2.5 pt-2"
               onClick={(e) => e.preventDefault()}
             >
-              {/* Swatch row */}
               <div className="flex items-center gap-1.5">
                 {colorEntries.map(([color]) => {
                   const colorData = product.variants.colors.find((c) => c.name === color)
@@ -264,8 +282,6 @@ export function ProductCard({
                   )
                 })}
               </div>
-
-              {/* Active color label */}
               <span className="text-[10px] text-muted-foreground leading-none">
                 {activeColor}
               </span>
