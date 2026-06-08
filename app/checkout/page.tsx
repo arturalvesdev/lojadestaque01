@@ -21,7 +21,7 @@ export default function CheckoutPage() {
 
   if (isCartLoading || isAuthLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center pt-16">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
           <p className="mt-4 text-muted-foreground">Carregando...</p>
@@ -34,17 +34,17 @@ export default function CheckoutPage() {
   if (isAuthenticated) {
     return (
       <div className="min-h-screen bg-background">
-        <div className="max-w-7xl mx-auto px-4 py-12">
-          <h1 className="text-4xl font-bold mb-8">Checkout</h1>
-          <div className="bg-secondary rounded-lg p-8">
-            <h2 className="text-2xl font-bold mb-4">Você já está logado</h2>
-            <p className="text-muted-foreground mb-6">
+        <div className="max-w-7xl mx-auto px-4 pt-24 pb-12">
+          <h1 className="text-2xl md:text-4xl font-bold mb-8">Checkout</h1>
+          <div className="bg-secondary rounded-2xl p-6 md:p-8">
+            <h2 className="text-xl md:text-2xl font-bold mb-4">Você já está logado</h2>
+            <p className="text-muted-foreground mb-6 text-sm md:text-base">
               O fluxo de envio completo ainda não foi implementado neste momento.
               Por enquanto, revise sua sacola e finalize o pedido pelo WhatsApp.
             </p>
             <Link
               href="/"
-              className="inline-block px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition"
+              className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:bg-primary/90 transition text-sm"
             >
               Voltar às Compras
             </Link>
@@ -58,17 +58,17 @@ export default function CheckoutPage() {
   if (items.length === 0) {
     return (
       <div className="min-h-screen bg-background">
-        <div className="max-w-7xl mx-auto px-4 py-12">
-          <h1 className="text-4xl font-bold mb-8">Checkout</h1>
-          <div className="bg-secondary rounded-lg p-8 text-center">
-            <p className="text-lg text-muted-foreground mb-6">
+        <div className="max-w-7xl mx-auto px-4 pt-24 pb-12">
+          <h1 className="text-2xl md:text-4xl font-bold mb-8">Checkout</h1>
+          <div className="bg-secondary rounded-2xl p-6 md:p-8 text-center">
+            <p className="text-base text-muted-foreground mb-6">
               Seu carrinho está vazio
             </p>
             <Link
               href="/catalogo/chinelos-kenner"
-              className="inline-block px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition"
+              className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:bg-primary/90 transition text-sm"
             >
-              Voltar às Compras
+              Ver produtos
             </Link>
           </div>
         </div>
@@ -78,14 +78,14 @@ export default function CheckoutPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        <h1 className="text-4xl font-bold mb-8">Checkout</h1>
+      <div className="max-w-7xl mx-auto px-4 pt-24 pb-12">
+        <h1 className="text-2xl md:text-4xl font-bold mb-8">Checkout</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Summary */}
           <div className="lg:col-span-2">
-            <div className="bg-secondary rounded-lg p-6 mb-8">
-              <h2 className="text-2xl font-bold mb-6">Resumo do Carrinho</h2>
+            <div className="bg-secondary rounded-2xl p-5 md:p-6 mb-6">
+              <h2 className="text-xl md:text-2xl font-bold mb-5">Resumo do Carrinho</h2>
 
               <div className="space-y-4 mb-6">
                 {items.map((item) => (
@@ -116,15 +116,15 @@ export default function CheckoutPage() {
             </div>
 
             {/* Authentication Forms */}
-            <div className="bg-secondary rounded-lg p-6">
+            <div className="bg-secondary rounded-2xl p-5 md:p-6">
               {showRegister ? (
                 <>
-                  <h2 className="text-2xl font-bold mb-6">Criar Conta</h2>
+                  <h2 className="text-xl md:text-2xl font-bold mb-5">Criar Conta</h2>
                   <RegisterForm onBack={() => setShowRegister(false)} />
                 </>
               ) : (
                 <>
-                  <h2 className="text-2xl font-bold mb-6">Entrar</h2>
+                  <h2 className="text-xl md:text-2xl font-bold mb-5">Entrar</h2>
                   <LoginForm
                     onSwitchToRegister={() => setShowRegister(true)}
                   />
@@ -135,7 +135,7 @@ export default function CheckoutPage() {
 
           {/* Order Summary Sidebar */}
           <div>
-            <div className="bg-secondary rounded-lg p-6 sticky top-4">
+            <div className="bg-secondary rounded-2xl p-5 md:p-6 sticky top-4">
               <h3 className="text-xl font-bold mb-4">Pedido</h3>
 
               <div className="space-y-3 mb-6 pb-6 border-b border-border">

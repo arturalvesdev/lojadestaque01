@@ -119,12 +119,12 @@ export function Footer() {
             <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
               Loja
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-1">
               {footerLinks.shop.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                    className="inline-block py-1.5 text-sm text-muted-foreground hover:text-primary transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -138,12 +138,12 @@ export function Footer() {
             <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
               Informações
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-1">
               {footerLinks.info.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                    className="inline-block py-1.5 text-sm text-muted-foreground hover:text-primary transition-colors"
                   >
                     {link.name}
                   </Link>
@@ -157,13 +157,13 @@ export function Footer() {
             <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-4">
               Contato
             </h4>
-            <ul className="space-y-4">
+            <ul className="space-y-3">
               <li>
                 <a
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(storeAddress.mapsQuery)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-start gap-3 text-muted-foreground hover:text-primary transition-colors"
+                  className="flex items-start gap-3 text-muted-foreground hover:text-primary transition-colors py-1"
                 >
                   <MapPin className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
                   <span className="text-sm">
@@ -180,13 +180,13 @@ export function Footer() {
                   href="https://wa.me/5511947824035"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors"
+                  className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors py-1.5 min-h-[44px]"
                 >
                   <Phone className="w-4 h-4 text-primary flex-shrink-0" />
                   <span className="text-sm">+55 11 94782-4035</span>
                 </a>
               </li>
-              <li className="flex items-center gap-3 text-muted-foreground">
+              <li className="flex items-center gap-3 text-muted-foreground py-1">
                 <Clock className="w-4 h-4 text-primary flex-shrink-0" />
                 <span className="text-sm">Seg–Sáb, 10h às 19h</span>
               </li>
@@ -245,11 +245,12 @@ export function Footer() {
             </div>
 
             {/* Legal Links */}
-            <div className="flex items-center gap-4 text-sm">
-              <Link href="/politica-de-troca" className="text-muted-foreground hover:text-primary transition-colors">
+            <div className="flex items-center gap-1 text-sm">
+              <Link href="/politica-de-troca" className="px-3 py-2 text-muted-foreground hover:text-primary transition-colors">
                 Troca e Devolução
               </Link>
-              <Link href="/politica-de-envio" className="text-muted-foreground hover:text-primary transition-colors">
+              <span className="text-border/60">·</span>
+              <Link href="/politica-de-envio" className="px-3 py-2 text-muted-foreground hover:text-primary transition-colors">
                 Envio
               </Link>
             </div>

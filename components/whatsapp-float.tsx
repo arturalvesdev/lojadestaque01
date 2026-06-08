@@ -25,7 +25,7 @@ export function WhatsAppFloat() {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.93 }}
           transition={{ type: "spring", stiffness: 300, damping: 22 }}
-          className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:shadow-xl hover:bg-[#20BD5A] transition-shadow"
+          className="fixed bottom-20 right-4 lg:bottom-6 lg:right-6 z-50 w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:shadow-xl hover:bg-[#20BD5A] transition-shadow"
           aria-label="Fale conosco no WhatsApp"
         >
           <svg className="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

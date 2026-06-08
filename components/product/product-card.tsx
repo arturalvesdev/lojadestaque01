@@ -283,7 +283,7 @@ export function ProductCard({
                     <motion.button
                       key={color}
                       type="button"
-                      whileHover={{ scale: 1.2 }}
+                      whileHover={{ scale: 1.15 }}
                       whileTap={{ scale: 0.9 }}
                       onMouseEnter={() => setActiveColor(color)}
                       onClick={(e) => {
@@ -293,13 +293,19 @@ export function ProductCard({
                       }}
                       aria-label={`Selecionar cor ${color}`}
                       aria-pressed={isActive}
-                      className={`w-3.5 h-3.5 rounded-full border-2 transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 ${
+                      className={`w-6 h-6 flex items-center justify-center rounded-full transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1 ${
                         isActive
-                          ? "ring-2 ring-primary ring-offset-1 border-transparent scale-110"
-                          : "border-border/50 hover:border-border/80"
+                          ? "ring-2 ring-primary ring-offset-1 scale-110"
+                          : ""
                       }`}
-                      style={{ backgroundColor: colorData?.hex ?? "#888888" }}
-                    />
+                    >
+                      <span
+                        className={`w-3.5 h-3.5 rounded-full border-2 block transition-all duration-150 ${
+                          isActive ? "border-transparent" : "border-border/50"
+                        }`}
+                        style={{ backgroundColor: colorData?.hex ?? "#888888" }}
+                      />
+                    </motion.button>
                   )
                 })}
               </div>

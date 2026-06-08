@@ -47,7 +47,7 @@ export function Header() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="lg:hidden p-2 -ml-2 text-foreground hover:text-primary transition-colors"
+              className="lg:hidden w-10 h-10 -ml-2 flex items-center justify-center text-foreground hover:text-primary transition-colors"
               aria-label="Toggle menu"
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -100,7 +100,7 @@ export function Header() {
               <button
                 type="button"
                 onClick={() => setIsSearchOpen((open) => !open)}
-                className={`p-2 transition-colors ${
+                className={`w-10 h-10 flex items-center justify-center transition-colors ${
                   isSearchOpen
                     ? "text-primary"
                     : "text-foreground hover:text-primary"
@@ -113,12 +113,12 @@ export function Header() {
               <button
                 type="button"
                 onClick={() => setFavoritesOpen(true)}
-                className="relative p-2 text-foreground hover:text-primary transition-colors"
+                className="relative w-10 h-10 flex items-center justify-center text-foreground hover:text-primary transition-colors"
                 aria-label="Favoritos"
               >
                 <Heart className="w-5 h-5" />
                 {favoritesCount > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+                  <span className="absolute top-1 right-1 w-4 h-4 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
                     {favoritesCount}
                   </span>
                 )}
@@ -126,7 +126,7 @@ export function Header() {
               <ThemeToggle />
               <Link
                 href="/conta"
-                className={`hidden sm:flex p-2 transition-colors ${
+                className={`hidden sm:flex w-10 h-10 items-center justify-center transition-colors ${
                   isAuthenticated
                     ? "text-primary"
                     : "text-foreground hover:text-primary"
@@ -135,13 +135,13 @@ export function Header() {
               >
                 <User className="w-5 h-5" />
               </Link>
-              <button 
+              <button
                 onClick={() => setIsOpen(true)}
-                className="p-2 text-foreground hover:text-primary transition-colors relative" 
+                className="relative w-10 h-10 flex items-center justify-center text-foreground hover:text-primary transition-colors"
                 aria-label="Carrinho"
               >
                 <ShoppingBag className="w-5 h-5" />
-                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+                <span className="absolute top-1 right-1 w-4 h-4 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
                   {totalItems}
                 </span>
               </button>
@@ -166,13 +166,13 @@ export function Header() {
         className="lg:hidden overflow-hidden bg-background border-b border-border"
       >
         <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
                 onClick={() => setIsMenuOpen(false)}
-                className="text-lg font-medium text-foreground hover:text-primary transition-colors py-2"
+                className="text-lg font-medium text-foreground hover:text-primary transition-colors py-3.5 border-b border-border/30 last:border-b-0"
               >
                 {link.name}
               </Link>
@@ -180,7 +180,7 @@ export function Header() {
             <Link
               href="/conta"
               onClick={() => setIsMenuOpen(false)}
-              className="text-lg font-medium text-foreground hover:text-primary transition-colors py-2 flex items-center gap-2"
+              className="text-lg font-medium text-foreground hover:text-primary transition-colors py-3.5 flex items-center gap-2"
             >
               <User className="w-5 h-5" />
               Minha conta
