@@ -905,6 +905,131 @@ export const storeProducts: Record<string, StoreProduct> = {
       uso: "Coleção / Casual",
     },
   }),
+  // ─── Camisas de Time — Coleção Ativa ─────────────────────────────────────────
+  "camisa-corinthians-i-25-26": product({
+    id: "camisa-corinthians-i-25-26",
+    name: "Camisa Corinthians I 25/26",
+    price: 180,
+    badge: "Novo",
+    category: "Camisas de Time",
+    image: "/products/camisas-time/camisa-corinthians-i-25-26/principal.webp",
+    images: [
+      "/products/camisas-time/camisa-corinthians-i-25-26/principal.webp",
+      "/products/camisas-time/camisa-corinthians-i-25-26/costas.webp",
+    ],
+    description:
+      "A Camisa Corinthians I da temporada 25/26 traz o clássico manto alvinegro em sua versão mais icônica — branca com detalhes em preto, fiel à identidade que atravessa gerações. Confeccionada em tecido leve e de boa respirabilidade, oferece conforto para o uso no dia a dia ou nas arquibancadas.\n\nIdeal para o fiel que quer representar o Timão com estilo e qualidade.",
+    highlights: [
+      "Manto oficial Corinthians temporada 25/26",
+      "Tecido leve com boa circulação de ar",
+      "Escudo e detalhes com acabamento cuidadoso",
+      "Modelagem confortável para uso diário e nas torcidas",
+      "Uniforme I — branco com detalhes em preto",
+    ],
+    specifications: {
+      marca: "Corinthians",
+      modelo: "Camisa I 25/26",
+      categoria: "Camisas de Time",
+      uso: "Torcida / Casual",
+    },
+    variants: {
+      sizes: ["P", "M", "G", "GG"],
+      colors: [],
+    },
+  }),
+  "camisa-corinthians-ii-25-26": product({
+    id: "camisa-corinthians-ii-25-26",
+    name: "Camisa Corinthians II 25/26",
+    price: 180,
+    badge: "Novo",
+    category: "Camisas de Time",
+    image: "/products/camisas-time/camisa-corinthians-ii-25-26/principal.webp",
+    images: [
+      "/products/camisas-time/camisa-corinthians-ii-25-26/principal.webp",
+      "/products/camisas-time/camisa-corinthians-ii-25-26/costas.webp",
+    ],
+    description:
+      "A Camisa Corinthians II da temporada 25/26 apresenta o segundo uniforme do clube em versão preta com detalhes em branco — arrojada, marcante e fiel ao estilo do Timão fora de casa. Tecido confortável para quem usa no dia a dia ou representa o clube nas arquibancadas.\n\nPara o torcedor que quer completar o armário com os dois mantos da temporada.",
+    highlights: [
+      "Segundo uniforme Corinthians temporada 25/26",
+      "Coloração preta com detalhes em branco",
+      "Tecido confortável e de fácil manutenção",
+      "Escudo aplicado com acabamento de qualidade",
+      "Uniforme II — ideal para quem não abre mão do visual completo",
+    ],
+    specifications: {
+      marca: "Corinthians",
+      modelo: "Camisa II 25/26",
+      categoria: "Camisas de Time",
+      uso: "Torcida / Casual",
+    },
+    variants: {
+      sizes: ["P", "M", "G", "GG"],
+      colors: [],
+    },
+  }),
+  "camisa-palmeiras-branca-26-27": product({
+    id: "camisa-palmeiras-branca-26-27",
+    name: "Camisa Palmeiras Branca 26/27",
+    price: 180,
+    badge: "Novo",
+    category: "Camisas de Time",
+    image: "/products/camisas-time/camisa-palmeiras-branca-26-27/principal.webp",
+    images: [
+      "/products/camisas-time/camisa-palmeiras-branca-26-27/principal.webp",
+      "/products/camisas-time/camisa-palmeiras-branca-26-27/costas.webp",
+    ],
+    description:
+      "A Camisa Palmeiras Branca da temporada 26/27 representa o segundo uniforme do Verdão com elegância e identidade. O branco limpo, combinado com os elementos do clube, entrega um visual diferenciado e sofisticado para o palmeirense que quer sair do padrão.\n\nFeita para torcer, para usar no dia a dia e para colecionar — a camisa que completa qualquer guarda-roupa palmeirense.",
+    highlights: [
+      "Segundo uniforme Palmeiras temporada 26/27",
+      "Visual branco com detalhes que remetem à identidade do clube",
+      "Tecido leve e confortável para uso prolongado",
+      "Escudo e elementos aplicados com atenção ao acabamento",
+      "Ótima opção para torcedores e colecionadores",
+    ],
+    specifications: {
+      marca: "Palmeiras",
+      modelo: "Camisa Branca 26/27",
+      categoria: "Camisas de Time",
+      uso: "Torcida / Casual",
+    },
+    variants: {
+      sizes: ["P", "M", "G", "GG"],
+      colors: [],
+    },
+  }),
+  "camisa-psg": product({
+    id: "camisa-psg",
+    name: "Camisa PSG",
+    price: 180,
+    badge: "Novo",
+    category: "Camisas de Time",
+    image: "/products/camisas-time/camisa-psg/principal.webp",
+    images: [
+      "/products/camisas-time/camisa-psg/principal.webp",
+      "/products/camisas-time/camisa-psg/costas.webp",
+    ],
+    description:
+      "A Camisa do Paris Saint-Germain traz o estilo inconfundível do clube mais icônico do futebol europeu. Com o visual marcante associado ao PSG — elegância parisiense e atitude esportiva numa só peça.\n\nPara quem aprecia futebol de alto nível e quer incorporar o estilo dos grandes clubes europeus no guarda-roupa.",
+    highlights: [
+      "Visual icônico do Paris Saint-Germain",
+      "Tecido leve e confortável para uso diário",
+      "Escudo e detalhes aplicados com acabamento cuidadoso",
+      "Peça versátil para composições casuais e esportivas",
+      "Referência no futebol e na cultura pop europeia",
+    ],
+    specifications: {
+      marca: "Paris Saint-Germain",
+      modelo: "Camisa PSG",
+      categoria: "Camisas de Time",
+      uso: "Casual / Torcida",
+    },
+    variants: {
+      sizes: ["P", "M", "G", "GG"],
+      colors: [],
+    },
+  }),
   // ─── Camisa Seleção Amarela Jogador ──────────────────────────────────────────
   "camisa-selecao-amarela-jogador": product({
     id: "camisa-selecao-amarela-jogador",
