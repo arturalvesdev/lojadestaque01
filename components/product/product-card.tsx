@@ -80,6 +80,12 @@ export function ProductCard({
       ? product.colorImages![activeColor][0]
       : product.image
 
+  // Perspectiva hover image for non-color-variant products
+  const hoverImage =
+    !hasColorVariants && product.images?.[1]?.includes("perspectiva")
+      ? product.images[1]
+      : null
+
   return (
     <Link href={`/produto/${product.id}`}>
       <motion.div
@@ -92,31 +98,69 @@ export function ProductCard({
           className={`relative ${aspectRatio === "portrait" ? "aspect-[3/4]" : "aspect-square"} rounded-2xl overflow-hidden bg-secondary mb-3.5 border border-border/20 group-hover:border-border/50 transition-colors duration-200`}
         >
           {hasColorVariants ? (
-            /* Stacked images — one per color, toggled by opacity for smooth transition */
-            colorEntries.map(([color, imgs]) => (
+            /* Stacked layers per color: principal always rendered, perspectiva fades in on hover */
+            <>
+              {colorEntries.map(([color, imgs]) => {
+                const hasPerspectiva = !!imgs[1]?.includes("perspectiva")
+                return (
+                  <Image
+                    key={`p-${color}`}
+                    src={imgs[0]}
+                    alt={`${product.name} — ${color}`}
+                    fill
+                    sizes={sizes}
+                    className={`object-cover transition-all duration-300 ${
+                      activeColor === color
+                        ? hasPerspectiva
+                          ? "opacity-100 group-hover:opacity-0"
+                          : "opacity-100 group-hover:scale-105"
+                        : "opacity-0"
+                    }`}
+                    unoptimized
+                  />
+                )
+              })}
+              {colorEntries.map(([color, imgs]) =>
+                imgs[1]?.includes("perspectiva") ? (
+                  <Image
+                    key={`pv-${color}`}
+                    src={imgs[1]}
+                    alt={`${product.name} — ${color}`}
+                    fill
+                    sizes={sizes}
+                    className={`object-cover transition-opacity duration-300 ${
+                      activeColor === color
+                        ? "opacity-0 group-hover:opacity-100"
+                        : "opacity-0"
+                    }`}
+                    unoptimized
+                  />
+                ) : null
+              )}
+            </>
+          ) : activeThumbnail ? (
+            <>
               <Image
-                key={color}
-                src={imgs[0]}
-                alt={`${product.name} — ${color}`}
+                src={activeThumbnail}
+                alt={product.name}
                 fill
                 sizes={sizes}
                 className={`object-cover transition-all duration-300 ${
-                  activeColor === color
-                    ? "opacity-100 group-hover:scale-105"
-                    : "opacity-0"
+                  hoverImage ? "group-hover:opacity-0" : "group-hover:scale-105"
                 }`}
                 unoptimized
               />
-            ))
-          ) : activeThumbnail ? (
-            <Image
-              src={activeThumbnail}
-              alt={product.name}
-              fill
-              sizes={sizes}
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-              unoptimized
-            />
+              {hoverImage && (
+                <Image
+                  src={hoverImage}
+                  alt={product.name}
+                  fill
+                  sizes={sizes}
+                  className="object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+                  unoptimized
+                />
+              )}
+            </>
           ) : (
             <NoImageFallback category={product.category} name={product.name} />
           )}

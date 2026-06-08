@@ -165,8 +165,8 @@ export const storeProducts: Record<string, StoreProduct> = {
     image: "/products/kenner/kenner-nk6-offwhite-azul-royal/frontal.png",
     images: [
       "/products/kenner/kenner-nk6-offwhite-azul-royal/frontal.png",
-      "/products/kenner/kenner-nk6-offwhite-azul-royal/lateral.png",
       "/products/kenner/kenner-nk6-offwhite-azul-royal/perspectiva.png",
+      "/products/kenner/kenner-nk6-offwhite-azul-royal/lateral.png",
       "/products/kenner/kenner-nk6-offwhite-azul-royal/sola.png",
     ],
     video: "/products/kenner/kenner-nk6-offwhite-azul-royal/video.mp4",
@@ -202,9 +202,9 @@ export const storeProducts: Record<string, StoreProduct> = {
     image: "/products/kenner/kenner-nk6-preto-grafite/principal.png",
     images: [
       "/products/kenner/kenner-nk6-preto-grafite/principal.png",
-      "/products/kenner/kenner-nk6-preto-grafite/frontal.png",
-      "/products/kenner/kenner-nk6-preto-grafite/lateral.png",
       "/products/kenner/kenner-nk6-preto-grafite/perspectiva.png",
+      "/products/kenner/kenner-nk6-preto-grafite/lateral.png",
+      "/products/kenner/kenner-nk6-preto-grafite/frontal.png",
     ],
     video: "/products/kenner/kenner-nk6-preto-grafite/video.mp4",
     description:
@@ -238,8 +238,8 @@ export const storeProducts: Record<string, StoreProduct> = {
     image: "/products/kenner/kenner-nk6-vermelho-preto/principal.png",
     images: [
       "/products/kenner/kenner-nk6-vermelho-preto/principal.png",
-      "/products/kenner/kenner-nk6-vermelho-preto/frontal.png",
       "/products/kenner/kenner-nk6-vermelho-preto/lateral.png",
+      "/products/kenner/kenner-nk6-vermelho-preto/frontal.png",
       "/products/kenner/kenner-nk6-vermelho-preto/sola.png",
     ],
     video: "/products/kenner/kenner-nk6-vermelho-preto/video.mp4",
@@ -275,9 +275,9 @@ export const storeProducts: Record<string, StoreProduct> = {
     image: "/products/kenner/kenner-summer-azul-royal-branco/principal.png",
     images: [
       "/products/kenner/kenner-summer-azul-royal-branco/principal.png",
-      "/products/kenner/kenner-summer-azul-royal-branco/frontal.png",
-      "/products/kenner/kenner-summer-azul-royal-branco/lateral.png",
       "/products/kenner/kenner-summer-azul-royal-branco/perspectiva.png",
+      "/products/kenner/kenner-summer-azul-royal-branco/lateral.png",
+      "/products/kenner/kenner-summer-azul-royal-branco/frontal.png",
       "/products/kenner/kenner-summer-azul-royal-branco/full-view.png",
     ],
     video: "/products/kenner/kenner-summer-azul-royal-branco/video.mp4",
@@ -312,9 +312,9 @@ export const storeProducts: Record<string, StoreProduct> = {
     image: "/products/kenner/kenner-summer-branco-preto/principal.png",
     images: [
       "/products/kenner/kenner-summer-branco-preto/principal.png",
-      "/products/kenner/kenner-summer-branco-preto/frontal.png",
-      "/products/kenner/kenner-summer-branco-preto/lateral.png",
       "/products/kenner/kenner-summer-branco-preto/perspectiva.png",
+      "/products/kenner/kenner-summer-branco-preto/lateral.png",
+      "/products/kenner/kenner-summer-branco-preto/frontal.png",
     ],
     video: "/products/kenner/kenner-summer-branco-preto/video.mp4",
     description:
@@ -348,9 +348,9 @@ export const storeProducts: Record<string, StoreProduct> = {
     image: "/products/kenner/kenner-summer-preto-branco/principal.png",
     images: [
       "/products/kenner/kenner-summer-preto-branco/principal.png",
-      "/products/kenner/kenner-summer-preto-branco/frontal.png",
-      "/products/kenner/kenner-summer-preto-branco/lateral.png",
       "/products/kenner/kenner-summer-preto-branco/perspectiva.png",
+      "/products/kenner/kenner-summer-preto-branco/lateral.png",
+      "/products/kenner/kenner-summer-preto-branco/frontal.png",
     ],
     video: "/products/kenner/kenner-summer-preto-branco/video.mp4",
     description:
@@ -565,15 +565,15 @@ export const storeProducts: Record<string, StoreProduct> = {
     images: [
       "/products/bones/bone-lacoste-sport-2026/azul/principal.webp",
       "/products/bones/bone-lacoste-sport-2026/azul/perspectiva.webp",
-      "/products/bones/bone-lacoste-sport-2026/azul/frente.webp",
       "/products/bones/bone-lacoste-sport-2026/azul/lateral.webp",
+      "/products/bones/bone-lacoste-sport-2026/azul/frente.webp",
     ],
     colorImages: {
       "Azul": [
         "/products/bones/bone-lacoste-sport-2026/azul/principal.webp",
         "/products/bones/bone-lacoste-sport-2026/azul/perspectiva.webp",
-        "/products/bones/bone-lacoste-sport-2026/azul/frente.webp",
         "/products/bones/bone-lacoste-sport-2026/azul/lateral.webp",
+        "/products/bones/bone-lacoste-sport-2026/azul/frente.webp",
       ],
       "Branco": [
         "/products/bones/bone-lacoste-sport-2026/branco/principal.webp",
