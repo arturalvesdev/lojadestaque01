@@ -1,6 +1,5 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 
 function InstagramIcon({ className }: { className?: string }) {
@@ -31,20 +30,7 @@ const reels = [
   { id: 6, href: "https://www.instagram.com/reel/DWmBob5ho2X/" },
 ]
 
-type ThumbnailMap = Record<number, string | null>
-
-function ReelCard({
-  href,
-  thumbnail,
-  index,
-}: {
-  href: string
-  thumbnail: string | null
-  index: number
-}) {
-  const [imgFailed, setImgFailed] = useState(false)
-  const showThumb = thumbnail && !imgFailed
-
+function ReelCard({ href, index }: { href: string; index: number }) {
   return (
     <motion.a
       href={href}
@@ -58,57 +44,18 @@ function ReelCard({
       className="group relative aspect-square rounded-xl overflow-hidden bg-secondary border border-border/20"
       aria-label="Ver reel no Instagram"
     >
-      {showThumb ? (
-        <>
-          {/* referrerPolicy="no-referrer" omits the Referer header so the
-              Instagram CDN signed token is the sole auth mechanism — no hotlink block */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={thumbnail}
-            alt=""
-            referrerPolicy="no-referrer"
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            onError={() => setImgFailed(true)}
-          />
-          <div className="absolute inset-0 bg-black/10 transition-colors duration-300 group-hover:bg-black/35" />
-        </>
-      ) : (
-        <div className="absolute inset-0 bg-gradient-to-br from-secondary via-muted/60 to-secondary/80 transition-opacity duration-300 group-hover:opacity-60" />
-      )}
-
+      <div className="absolute inset-0 bg-gradient-to-br from-secondary via-muted/60 to-secondary/80 transition-opacity duration-300 group-hover:opacity-60" />
       <div className="absolute inset-0 flex items-center justify-center">
-        <InstagramIcon
-          className={`w-7 h-7 transition-all duration-300 group-hover:scale-110 ${
-            showThumb
-              ? "text-white/70 group-hover:text-white"
-              : "text-muted-foreground/30 group-hover:text-foreground"
-          }`}
-        />
+        <InstagramIcon className="w-7 h-7 text-muted-foreground/30 transition-all duration-300 group-hover:scale-110 group-hover:text-foreground" />
       </div>
     </motion.a>
   )
 }
 
 export function InstagramFeed() {
-  const [thumbnails, setThumbnails] = useState<ThumbnailMap>({})
-
-  useEffect(() => {
-    reels.forEach((reel) => {
-      fetch(`/api/instagram-thumbnail?url=${encodeURIComponent(reel.href)}`)
-        .then((res) => (res.ok ? res.json() : { thumbnail: null }))
-        .then((data: { thumbnail: string | null }) => {
-          setThumbnails((prev) => ({ ...prev, [reel.id]: data.thumbnail }))
-        })
-        .catch(() => {
-          setThumbnails((prev) => ({ ...prev, [reel.id]: null }))
-        })
-    })
-  }, [])
-
   return (
     <section className="py-24 md:py-32">
       <div className="container mx-auto px-4">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -128,19 +75,12 @@ export function InstagramFeed() {
           </p>
         </motion.div>
 
-        {/* Card grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
           {reels.map((reel, index) => (
-            <ReelCard
-              key={reel.id}
-              href={reel.href}
-              thumbnail={thumbnails[reel.id] ?? null}
-              index={index}
-            />
+            <ReelCard key={reel.id} href={reel.href} index={index} />
           ))}
         </div>
 
-        {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
