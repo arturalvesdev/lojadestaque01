@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
@@ -85,11 +85,24 @@ export function ProductCard({
   // Main image: color principal → product.image → first from images[]
   const mainImage = product.image ?? product.images?.[0] ?? null
 
-  // Hover image for products without colorImages:
-  // perspectiva anywhere in images[] → images[1] → null
+  // Hover image for products without colorImages
   const hoverImage = !hasColorVariants
     ? resolveHoverImg(product.images ?? (mainImage ? [mainImage] : []))
     : null
+
+  // Image-switching hover: only enabled on true pointer/hover devices.
+  // Starts false to avoid hydration mismatch; set after mount via matchMedia.
+  const [hoverSupported, setHoverSupported] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
+
+  useEffect(() => {
+    setHoverSupported(
+      window.matchMedia("(hover: hover) and (pointer: fine)").matches
+    )
+  }, [])
+
+  // showHover: true only on desktop pointer devices while the card is hovered
+  const showHover = hoverSupported && isHovered
 
   return (
     <Link href={`/produto/${product.id}`}>
@@ -97,6 +110,8 @@ export function ProductCard({
         whileHover={{ y: -4 }}
         transition={{ duration: 0.2 }}
         className="group cursor-pointer"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       >
         {/* ── Image area ── */}
         <div
@@ -106,13 +121,14 @@ export function ProductCard({
         >
           {hasColorVariants ? (
             /*
-             * Stacked layers — one principal + one hover image per color.
-             * Opacity toggled by activeColor state; hover fades in perspectiva/second image.
-             * All images are pre-rendered so color switching is instant (no flicker).
+             * Stacked layers — principal + hover image per color.
+             * Color switching is instant (opacity toggle by activeColor state).
+             * Hover image only appears on pointer/hover devices (showHover gate).
              */
             <>
               {colorEntries.map(([color, imgs]) => {
                 const hImg = resolveHoverImg(imgs)
+                const isActive = activeColor === color
                 return (
                   <Image
                     key={`p-${color}`}
@@ -121,12 +137,12 @@ export function ProductCard({
                     fill
                     sizes={sizes}
                     className={`object-cover transition-all duration-300 ${
-                      activeColor === color
-                        ? hImg
-                          ? "opacity-100 group-hover:opacity-0"
-                          : "opacity-100 group-hover:scale-105"
+                      isActive
+                        ? hImg && showHover
+                          ? "opacity-0"
+                          : "opacity-100"
                         : "opacity-0"
-                    }`}
+                    } ${isActive && !(hImg && showHover) ? "scale-100" : ""}`}
                     unoptimized
                   />
                 )
@@ -134,6 +150,7 @@ export function ProductCard({
               {colorEntries.map(([color, imgs]) => {
                 const hImg = resolveHoverImg(imgs)
                 if (!hImg) return null
+                const isActive = activeColor === color
                 return (
                   <Image
                     key={`h-${color}`}
@@ -142,9 +159,7 @@ export function ProductCard({
                     fill
                     sizes={sizes}
                     className={`object-cover transition-opacity duration-300 ${
-                      activeColor === color
-                        ? "opacity-0 group-hover:opacity-100"
-                        : "opacity-0"
+                      isActive && showHover ? "opacity-100" : "opacity-0"
                     }`}
                     unoptimized
                   />
@@ -154,7 +169,7 @@ export function ProductCard({
           ) : mainImage ? (
             /*
              * Single-image or images[] products.
-             * Cross-fade to hover image when available; scale-only when not.
+             * Cross-fade to hover image on pointer devices only; scale on no-hover.
              */
             <>
               <Image
@@ -163,7 +178,11 @@ export function ProductCard({
                 fill
                 sizes={sizes}
                 className={`object-cover transition-all duration-300 ${
-                  hoverImage ? "group-hover:opacity-0" : "group-hover:scale-105"
+                  hoverImage && showHover
+                    ? "opacity-0"
+                    : !hoverImage && showHover
+                    ? "scale-105"
+                    : "opacity-100"
                 }`}
                 unoptimized
               />
@@ -173,7 +192,9 @@ export function ProductCard({
                   alt={product.name}
                   fill
                   sizes={sizes}
-                  className="object-cover transition-opacity duration-300 opacity-0 group-hover:opacity-100"
+                  className={`object-cover transition-opacity duration-300 ${
+                    showHover ? "opacity-100" : "opacity-0"
+                  }`}
                   unoptimized
                 />
               )}
