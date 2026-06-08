@@ -42,6 +42,9 @@ function ReelCard({
   thumbnail: string | null
   index: number
 }) {
+  const [imgFailed, setImgFailed] = useState(false)
+  const showThumb = thumbnail && !imgFailed
+
   return (
     <motion.a
       href={href}
@@ -55,28 +58,28 @@ function ReelCard({
       className="group relative aspect-square rounded-xl overflow-hidden bg-secondary border border-border/20"
       aria-label="Ver reel no Instagram"
     >
-      {thumbnail ? (
-        /* Real thumbnail from og:image */
+      {showThumb ? (
         <>
+          {/* referrerPolicy="no-referrer" omits the Referer header so the
+              Instagram CDN signed token is the sole auth mechanism — no hotlink block */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={thumbnail}
             alt=""
+            referrerPolicy="no-referrer"
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            onError={() => setImgFailed(true)}
           />
-          {/* Darkening overlay on hover */}
           <div className="absolute inset-0 bg-black/10 transition-colors duration-300 group-hover:bg-black/35" />
         </>
       ) : (
-        /* Fallback gradient when no thumbnail available */
         <div className="absolute inset-0 bg-gradient-to-br from-secondary via-muted/60 to-secondary/80 transition-opacity duration-300 group-hover:opacity-60" />
       )}
 
-      {/* Play / Instagram icon overlay — always visible */}
       <div className="absolute inset-0 flex items-center justify-center">
         <InstagramIcon
           className={`w-7 h-7 transition-all duration-300 group-hover:scale-110 ${
-            thumbnail
+            showThumb
               ? "text-white/70 group-hover:text-white"
               : "text-muted-foreground/30 group-hover:text-foreground"
           }`}
@@ -90,7 +93,6 @@ export function InstagramFeed() {
   const [thumbnails, setThumbnails] = useState<ThumbnailMap>({})
 
   useEffect(() => {
-    // Fire all thumbnail requests in parallel after mount — does not block render
     reels.forEach((reel) => {
       fetch(`/api/instagram-thumbnail?url=${encodeURIComponent(reel.href)}`)
         .then((res) => (res.ok ? res.json() : { thumbnail: null }))
