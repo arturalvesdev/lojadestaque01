@@ -554,6 +554,57 @@ export const storeProducts: Record<string, StoreProduct> = {
       ],
     },
   }),
+  // ─── Boné Lacoste Sport 2026 ────────────────────────────────────────────────
+  "bone-lacoste-sport-2026": product({
+    id: "bone-lacoste-sport-2026",
+    name: "Boné Lacoste Sport 2026",
+    price: 180,
+    badge: "Novo",
+    category: "Bonés",
+    image: "/products/bones/bone-lacoste-sport-2026/azul/principal.webp",
+    images: [
+      "/products/bones/bone-lacoste-sport-2026/azul/principal.webp",
+      "/products/bones/bone-lacoste-sport-2026/azul/perspectiva.webp",
+      "/products/bones/bone-lacoste-sport-2026/azul/frente.webp",
+      "/products/bones/bone-lacoste-sport-2026/azul/lateral.webp",
+    ],
+    colorImages: {
+      "Azul": [
+        "/products/bones/bone-lacoste-sport-2026/azul/principal.webp",
+        "/products/bones/bone-lacoste-sport-2026/azul/perspectiva.webp",
+        "/products/bones/bone-lacoste-sport-2026/azul/frente.webp",
+        "/products/bones/bone-lacoste-sport-2026/azul/lateral.webp",
+      ],
+      "Branco": [
+        "/products/bones/bone-lacoste-sport-2026/branco/principal.webp",
+        "/products/bones/bone-lacoste-sport-2026/branco/perspectiva.webp",
+        "/products/bones/bone-lacoste-sport-2026/branco/frente.webp",
+      ],
+    },
+    description:
+      "O Boné Lacoste Sport 2026 combina design esportivo, visual sofisticado e versatilidade para o uso diário. Seu acabamento cuidadosamente selecionado e sua estética minimalista tornam a peça ideal para compor produções casuais e esportivas com personalidade.\n\nDesenvolvido para quem valoriza conforto, estilo e praticidade em um acessório atemporal.",
+    highlights: [
+      "Visual esportivo e moderno",
+      "Design inspirado na linha Sport",
+      "Acabamento selecionado",
+      "Ajuste confortável",
+      "Ideal para uso diário",
+      "Versátil para diferentes estilos",
+    ],
+    specifications: {
+      marca: "Lacoste",
+      modelo: "Sport 2026",
+      categoria: "Bonés",
+      uso: "Casual",
+    },
+    variants: {
+      sizes: ["Único"],
+      colors: [
+        { name: "Azul", hex: "#1E40AF" },
+        { name: "Branco", hex: "#F5F5F5" },
+      ],
+    },
+  }),
   "time-1": product({
     id: "time-1",
     isActive: false,
