@@ -22,8 +22,8 @@ function InstagramIcon({ className }: { className?: string }) {
 }
 
 const reels = [
-  { id: 1, href: "https://www.instagram.com/reel/DXRp7GbDVeD/" },
-  { id: 2, href: "https://www.instagram.com/reel/DXfF3ntEo6q/" },
+  { id: 1, href: "https://www.instagram.com/reel/DZP6lu6B4yl/" },
+  { id: 2, href: "https://www.instagram.com/reel/DZDuFDLyDhJ/" },
   { id: 3, href: "https://www.instagram.com/reel/DW2EwP0iWFH/" },
   { id: 4, href: "https://www.instagram.com/reel/DWt1zceEYiu/" },
   { id: 5, href: "https://www.instagram.com/reel/DWmBob5ho2X/" },
