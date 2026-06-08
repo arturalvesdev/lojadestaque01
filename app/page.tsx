@@ -1,6 +1,7 @@
 import { Header } from "@/components/header"
 import { Hero } from "@/components/hero"
 import { TrustSection } from "@/components/trust-section"
+import { CuratedSelection } from "@/components/curated-selection"
 import { Collections } from "@/components/collections"
 import { FeaturedProducts } from "@/components/featured-products"
 import { ReviewsSection } from "@/components/reviews-section"
@@ -14,6 +15,7 @@ export default function Home() {
       <Header />
       <Hero />
       <TrustSection />
+      <CuratedSelection />
       <Collections />
       <FeaturedProducts />
       <ReviewsSection />
