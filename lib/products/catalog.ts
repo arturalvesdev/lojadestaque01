@@ -578,7 +578,7 @@ export const storeProducts: Record<string, StoreProduct> = {
       "Branco": [
         "/products/bones/bone-lacoste-sport-2026/branco/principal.webp",
         "/products/bones/bone-lacoste-sport-2026/branco/perspectiva.webp",
-        "/products/bones/bone-lacoste-sport-2026/branco/frente.webp",
+        "/products/bones/bone-lacoste-sport-2026/branco/lateral.webp",
       ],
     },
     description:
