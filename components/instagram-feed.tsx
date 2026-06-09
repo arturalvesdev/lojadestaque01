@@ -64,14 +64,14 @@ export function InstagramFeed() {
           className="text-center mb-12"
         >
           <span className="text-sm font-medium text-primary tracking-wider uppercase mb-4 block">
-            @destaquedosurf_
+            @oficial_destaque
           </span>
           <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-foreground mb-4">
             Siga Nossa Loja
           </h2>
           <p className="text-muted-foreground max-w-xl mx-auto">
             Nos acompanhe no Instagram e esteja atento às novidades.{" "}
-            <span className="text-primary font-semibold">@destaquedosurf_</span>
+            <span className="text-primary font-semibold">@oficial_destaque</span>
           </p>
         </motion.div>
 

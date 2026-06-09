@@ -19,7 +19,7 @@ const footerLinks = {
   shop: [
     { name: "Novidades", href: "/#new" },
     { name: "Chinelos Kenner", href: "/catalogo/chinelos-kenner" },
-    { name: "Bonés Lacoste", href: "/catalogo/bones-lacoste" },
+    { name: "Bonés", href: "/catalogo/bones-lacoste" },
     { name: "Camisas de Time", href: "/catalogo/camisas-time" },
     { name: "Seleção Brasileira", href: "/catalogo/selecao-brasileira" },
     { name: "Sobre nós", href: "/sobre" },
