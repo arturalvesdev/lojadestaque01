@@ -24,7 +24,7 @@ const collections = [
     category: "Bonés",
     description: "Estilo e versatilidade",
     href: "/catalogo/bones-lacoste",
-    image: "/products/bones/bone-nike-club/branco/principal.avif",
+    image: "/products/bones/bone-lacoste-sport-2026/azul/principal.webp",
     gradient: "bg-gradient-to-br from-secondary via-emerald-950/30 to-card",
   },
   {
