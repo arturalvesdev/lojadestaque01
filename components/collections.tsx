@@ -34,7 +34,7 @@ const collections = [
     category: "Camisas de Time",
     description: "Vista seu clube",
     href: "/catalogo/camisas-time",
-    image: null,
+    image: "/products/camisas-time/camisa-corinthians-i-25-26/principal.webp",
     gradient: "bg-gradient-to-br from-secondary via-blue-950/25 to-card",
   },
   {
